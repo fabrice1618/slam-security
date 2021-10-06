@@ -5,8 +5,9 @@ class AuthController
 {
     public function login()
     {
-        $pseudo = "";
-        $password = "";
+        $username = ParamUtils::findPOSTParam('username');
+        $password = ParamUtils::findPOSTParam('password');
+
     }
 
     public function logout()
