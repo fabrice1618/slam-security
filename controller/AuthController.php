@@ -10,10 +10,12 @@ class AuthController
     {
         $username = ParamUtils::findPOSTParam('username');
         $password = ParamUtils::findPOSTParam('password');
-        if(empty($username) || empty($password))
-        {
+
+        if (empty($username) || empty($password)) {
             throw new LoginException("Empty Credentials");
         }
+
+
     }
 
     public function logout()
