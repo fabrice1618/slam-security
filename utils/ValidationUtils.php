@@ -2,9 +2,12 @@
 
 class ValidationUtils
 {
-    public static function validValue(string $value): string
+    public static function validValue(string $value): ?string
     {
-        $value = htmlspecialchars($value);
-        return $value;
+        if (!isset($value)) {
+            return null;
+        }
+
+        return htmlspecialchars($value);
     }
 }
