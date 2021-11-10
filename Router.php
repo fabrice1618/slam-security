@@ -112,3 +112,4 @@ class Router
 }
 
 // catch les exeptions revoyées du Controller
+// Voir pour call un action par défaut si il n'y a pas d'action , créer un controller par défaut maybe
