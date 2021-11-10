@@ -1,5 +1,5 @@
 <?php
 
 class Settings{
-    public global $basepath = "slam-security";
+    public global $basePath = $_SERVER['DOCUMENT_ROOT'] . '/';
 }
