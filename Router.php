@@ -7,7 +7,6 @@ class Router
     private string $controllerPath;
     private string $actionName;
     private string $route;
-    private Settings $settings;
     private array $url_split;
 
     public function __construct()
@@ -21,6 +20,8 @@ class Router
         $this->decodeUrl();
         $this->isControllerExist();
         $this->isActionExist();
+        $this->setControllerPath();
+        $this->callController();
     }
     
     //fonction permettant décoder la route et permet d'en déduire la route et l'action
@@ -70,9 +71,9 @@ class Router
     }
     
     //fonction qui 
-    private function callController()
+    private function setControllerPath()
     { 
-        $this->controllerPath = $this->settings->basepath . '/controller/' . $this->controllerName . 'Controller.php';
+        $this->controllerPath = Settings::$basePath . 'controller/' . $this->controllerName . 'Controller.php';
     }
 
     //fonction qui permet de vérifier si le cookie est valide 
@@ -86,6 +87,15 @@ class Router
         {
             //rediriger vers le Controller Login
         }
+    }
+    
+    static function redirectTo(string $controllerToRedirect)
+    {
+        new $controllerToRedirect();
+    }
+    private function callController()
+    {
+        $this->controller  = new $this->controllerName();
     }
 }
 
