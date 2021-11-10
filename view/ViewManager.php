@@ -17,9 +17,4 @@ class ViewManager
 
         echo $templateContent;
     }
-
-    public static function loadView(string $templateName): void
-    {
-        ViewManager::loadView($templateContent, []);
-    }
 }
