@@ -3,12 +3,12 @@
 class CommentController extends Controller {
 
     public function load(){
-        $action = $_POST['action'];
+        $action = ParamUtils::findGETParam('action');
         loadView();
     }
 
     public function loadView(){
-        
+        echo file_get_contents('view/CommentView.php');
     }
 
     public function getFormInfo(){

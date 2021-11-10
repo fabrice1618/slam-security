@@ -2,8 +2,10 @@
 
 class HomeController
 {
+    /**
+     * @throws Exception
+     */
     public function loadView(){
-        $viewManager = new ViewManager();
-        $viewManager->loadView("home-template");
+        ViewManager::loadView("home-template",[]);
     }
 }
