@@ -5,9 +5,9 @@
 class AuthController
 {
     /**
-     * @throws LoginException
+     * @throws Exception
      */
-    public function login()
+    public function login() : void
     {
 
         if (isset($_SESSION['utilisateur_id'])) {
@@ -17,7 +17,8 @@ class AuthController
         $password = ParamUtils::findPOSTParam('password');
 
         if (empty($username) || empty($password)) {
-            throw new LoginException("Empty Credentials");
+            // empty credentials
+            return;
         }
 
         if ($this->userExist($username, $password)) {
@@ -25,6 +26,7 @@ class AuthController
             $_SESSION['utilisateur_id'] = $user->getUserId();
             header("Location:home");
         }
+        ViewManager::loadView("login-template",["ERROR_MESSAGE"=>""]);
     }
 
     public function logout()
