@@ -1,5 +1,6 @@
 <?php
-
+declare(strict_types = 1);
 class Settings{
-    public global $basePath = $_SERVER['DOCUMENT_ROOT'] . '/';
+    const BASEPATH = 'http://localhost/';
+
 }

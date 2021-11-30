@@ -2,7 +2,7 @@
 //declare(strict_types=1);
 
 
-class AuthController
+class AuthController implements Controller
 {
     /**
      * @throws Exception

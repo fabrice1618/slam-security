@@ -1,9 +1,13 @@
 <?php
 
-class NotFoundController
+class NotFoundController implements Controller
 {
-    public function loadView(){
+    /**
+     * @throws Exception
+     */
+    public function loadView()
+    {
         $viewManager = new ViewManager();
-        $viewManager->loadView("notFound-template");
+        $viewManager->loadView("notFound-template", []);
     }
 }
