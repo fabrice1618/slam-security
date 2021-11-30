@@ -3,44 +3,52 @@ declare(strict_types = 1);
 class Router
 {
     private string $currentUrl;
+    private Controller $controller;
     private string $controllerName;
     private string $controllerPath;
     private string $actionName;
     private string $route;
-    private Settings $settings;
     private array $url_split;
+    private array $urlParams;
 
     public function __construct()
     {
+        $this->urlParams = [];
+        $this->controller = null;
         $this->url_split = [];
         $this->currentUrl = $_POST;
         $this->actionName ='';
         $this->controllerName = '';
         $this->route = $_SERVER ['REDIRECT_URL'];
-        
+        $this->routing();
+    }
+    private function routing()
+    {
         $this->decodeUrl();
         $this->isControllerExist();
+        $this->callController();
         $this->isActionExist();
+        $this->callAction();
     }
-    
     //fonction permettant décoder la route et permet d'en déduire la route et l'action
     private function decodeUrl()
     {
-        // $aReturnRoute = [ 'controller' => '', 'params' => [] ];
         $this->url_split = explode("/", substr( $this->currentUrl, 1) );
         if (!empty($url_split[0])) {
             $this->controllerName = $this->url_split[0];
-            for( $i=1; $i < count($this->url_split); $i++ ) {
-                array_push($aReturnRoute['params'], $this->url_split[$i] );
+            if (!empty($url_split[1])) {
+                $this->actionName = $this->url_split[1];
+                for( $i=2; $i < count($this->url_split); $i++ ) 
+                {
+                    array_push($this->urlParams, $i );
+                }
             }
         }
-        
-        if ( !file_exists($this->callController( $aReturnRoute['controller'] )) ) {
+        else if ( !file_exists(/*le path du controller*/) ) 
+        {
             $this->controllerName = 'NotFound';
-            $aReturnRoute['params'] = [];
+            $urlParams = [];
         }
-        
-        return($aReturnRoute);
     }
     
     //fonction permettant de tester si un controller existe
@@ -59,20 +67,21 @@ class Router
     //fonction permetant de vérifier si l'action existe
     public function isActionExist() : bool
     {
-        if (method_exists($this->controllerName,$this->actionName)) 
+        if (method_exists($this->controller,$this->actionName)) 
         {
             return true;
         }
         else
         {
             return false;
+            //appeller la méthode par défaut
         }
     }
     
     //fonction qui 
-    private function callController()
-    { 
-        $this->controllerPath = $this->settings->basepath . '/controller/' . $this->controllerName . 'Controller.php';
+    private function setControllerPath()
+    {
+        $this->controllerPath = Settings::$basePath . 'controller/' . $this->controllerName . 'Controller.php';
     }
 
     //fonction qui permet de vérifier si le cookie est valide 
@@ -87,6 +96,20 @@ class Router
             //rediriger vers le Controller Login
         }
     }
+    
+    static function redirectTo(string $controllerToRedirect)
+    {
+        new $controllerToRedirect();
+    }
+    private function callController()
+    {
+        $this->controller  = new $this->controllerName();
+    }
+    private function callAction()
+    {
+        $this->controller->{$this->actionName}($this->urlParams);
+    }
 }
 
 // catch les exeptions revoyées du Controller
+// Voir pour call un action par défaut si il n'y a pas d'action , créer un controller par défaut maybe
