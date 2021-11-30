@@ -1,6 +1,6 @@
 <?php
 
-class NotFoundController
+class NotFoundController implements Controller
 {
     /**
      * @throws Exception
