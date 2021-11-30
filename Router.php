@@ -5,6 +5,7 @@ class Router
     private string $currentUrl;
     private Controller $controller;
     private string $controllerName;
+    private string $controllerFullName;
     private string $controllerPath;
     private string $actionName;
     private string $route;
@@ -14,7 +15,7 @@ class Router
     public function __construct()
     {
         $this->urlParams = [];
-        $this->controller = null;
+        $this->controller = new tagu;
         $this->url_split = [];
         $this->currentUrl = $_POST;
         $this->actionName ='';
@@ -60,7 +61,7 @@ class Router
         }
         else
         {
-            return false;
+            return true;
         }
     }
     
@@ -73,15 +74,15 @@ class Router
         }
         else
         {
-            return false;
+            return true;
             //appeller la méthode par défaut
         }
     }
     
-    //fonction qui 
+    //fonction qui
     private function setControllerPath()
     {
-        $this->controllerPath = Settings::$basePath . 'controller/' . $this->controllerName . 'Controller.php';
+        $this->controllerPath = Settings::BASEPATH . 'controller/' . $this->controllerName . 'Controller.php';
     }
 
     //fonction qui permet de vérifier si le cookie est valide 
@@ -99,15 +100,21 @@ class Router
     
     static function redirectTo(string $controllerToRedirect)
     {
-        new $controllerToRedirect();
+        new $controllerToRedirect();        
     }
+    
     private function callController()
     {
-        $this->controller  = new $this->controllerName();
+        // $this->controllerFullName = $this->controllerName . "Controller";
+        $this->controllerFullName = 'HomeController';
+        $this->controller = new $this->controllerFullName();
+        $this->actionName ='loadView';
     }
+
     private function callAction()
     {
         $this->controller->{$this->actionName}($this->urlParams);
+        $this->controller->$this->actionName();
     }
 }
 
