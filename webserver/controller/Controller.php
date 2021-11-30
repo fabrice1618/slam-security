@@ -2,5 +2,5 @@
 
 interface Controller
 {
-
+    public function default();
 }

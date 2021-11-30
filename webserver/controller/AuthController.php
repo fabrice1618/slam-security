@@ -36,7 +36,8 @@ class AuthController implements Controller
     public function logout(): void
     {
         session_destroy();
-
+        unset($_COOKIE["token"]);
+        header("Location:login");
         // TODO call router for redirection to login page
     }
 

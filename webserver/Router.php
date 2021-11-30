@@ -5,6 +5,7 @@ class Router
     private string $currentUrl;
     private Controller $controller;
     private string $controllerName;
+    private string $controllerFullName;
     private string $controllerPath;
     private string $actionName;
     private string $route;
@@ -14,8 +15,9 @@ class Router
     public function __construct()
     {
         $this->urlParams = [];
+        $this->controller = new Controller();
         $this->url_split = [];
-        $this->currentUrl = "";
+        $this->currentUrl = $_POST;
         $this->actionName ='';
         $this->controllerName = '';
         $this->route = $_SERVER ['REDIRECT_URL'];
@@ -59,7 +61,7 @@ class Router
         }
         else
         {
-            return false;
+            return true;
         }
     }
     
@@ -72,15 +74,15 @@ class Router
         }
         else
         {
+            $this->actionName = 'default';
             return false;
-            //appeller la méthode par défaut
         }
     }
     
-    //fonction qui 
+    //fonction qui
     private function setControllerPath()
     {
-        $this->controllerPath = Settings::$basePath . 'controller/' . $this->controllerName . 'Controller.php';
+        $this->controllerPath = Settings::BASE_PATH . 'controller/' . $this->controllerName . 'Controller.php';
     }
 
     //fonction qui permet de vérifier si le cookie est valide 
@@ -92,23 +94,27 @@ class Router
         }
         else
         {
-            //rediriger vers le Controller Login
+            Router::redirectTo('login','login');
         }
     }
     
-    static function redirectTo(string $controllerToRedirect)
+    static function redirectTo(string $controllerToRedirect, string $actionToRedirect)
     {
-        new $controllerToRedirect();
+        $controllerToRedirect = $controllerToRedirect . "Controller";
+        $controller = new $controllerToRedirect();
+        $controller->$actionToRedirect();
     }
+    
     private function callController()
     {
-        $this->controller  = new $this->controllerName();
+        $this->controllerFullName = $this->controllerName . "Controller";
+        $this->controller = new $this->controllerFullName();
     }
+
     private function callAction()
     {
-        $this->controller->{$this->actionName}($this->urlParams);
+        // $this->controller->{$this->actionName}($this->urlParams);
+        $this->controller->$this->actionName();
     }
 }
-
-// catch les exeptions revoyées du Controller
-// Voir pour call un action par défaut si il n'y a pas d'action , créer un controller par défaut maybe
+// catch les exeptions renvoyées du Controller
