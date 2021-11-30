@@ -12,11 +12,11 @@ class ViewManager
         }
         $templateContent = file_get_contents("./templates/" . $templateName . ".html");
 
-        preg_match("{{.*?\}}",$templateContent,$match);
-        if(sizeof($match) > sizeof($param))
-        {
+        preg_match("{{.*?\}}", $templateContent, $match);
+        if (sizeof($match) > sizeof($param)) {
             throw new Exception("Wrong number of variables");
         }
+        
         foreach ($param as $variableName => $variableContent) {
             $templateContent = str_replace("{{" . $variableName . "}}", $variableContent, $templateContent);
         }
