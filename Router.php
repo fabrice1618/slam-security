@@ -15,7 +15,7 @@ class Router
     public function __construct()
     {
         $this->urlParams = [];
-        $this->controller = new tagu;
+        $this->controller = new Controller();
         $this->url_split = [];
         $this->currentUrl = $_POST;
         $this->actionName ='';
@@ -94,26 +94,27 @@ class Router
         }
         else
         {
-            //rediriger vers le Controller Login
+            Router::redirectTo('login','login');
+
         }
     }
     
-    static function redirectTo(string $controllerToRedirect)
+    static function redirectTo(string $controllerToRedirect, string $actionToRedirect)
     {
-        new $controllerToRedirect();        
+        $controllerToRedirect = $controllerToRedirect . "Controller";
+        $controller = new $controllerToRedirect();
+        $controller->$actionToRedirect();
     }
     
     private function callController()
     {
-        // $this->controllerFullName = $this->controllerName . "Controller";
-        $this->controllerFullName = 'HomeController';
+        $this->controllerFullName = $this->controllerName . "Controller";
         $this->controller = new $this->controllerFullName();
-        $this->actionName ='loadView';
     }
 
     private function callAction()
     {
-        $this->controller->{$this->actionName}($this->urlParams);
+        // $this->controller->{$this->actionName}($this->urlParams);
         $this->controller->$this->actionName();
     }
 }
