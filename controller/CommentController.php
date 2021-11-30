@@ -1,6 +1,6 @@
 <?php 
 
-class CommentController extends Controller {
+class CommentController implements Controller {
 
     public function load(){
         $action = ParamUtils::findGETParam('action');
