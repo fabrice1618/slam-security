@@ -2,7 +2,7 @@
 
 spl_autoload_register( function($className){
 
-    $basePath = Settings::BASEPATH;
+    $BASE_PATH = Settings::BASEPATH;
 
     if(!isset($BASE_PATH)){
         throw new \Exception("Autoload Exception : Basepath not defined", 1);
