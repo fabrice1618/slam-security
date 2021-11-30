@@ -18,7 +18,6 @@ class ViewManager
 
     static function compileCode($code): string
     {
-        $code = self::compileBlock($code);
         $code = self::compileYield($code);
         $code = self::compileEscapedEchos($code); // html special char
         $code = self::compileEchos($code);
@@ -45,25 +44,11 @@ class ViewManager
         return preg_replace('~\{{\s*(.+?)\s*\}}~is', '<?php echo $1 ?>', $code);
     }
 
-    static function compileEscapedEchos($code)
+    static function compileEscapedEchos($code): array|string|null
     {
         return preg_replace('~\{{{\s*(.+?)\s*\}}}~is', '<?php echo htmlentities($1, ENT_QUOTES, \'UTF-8\') ?>', $code);
     }
 
-    static function compileBlock($code)
-    {
-        preg_match_all('/{% ?block ?(.*?) ?%}(.*?){% ?endblock ?%}/is', $code, $matches, PREG_SET_ORDER);
-        foreach ($matches as $value) {
-            if (!array_key_exists($value[1], self::$blocks)) self::$blocks[$value[1]] = '';
-            if (strpos($value[2], '@parent') === false) {
-                self::$blocks[$value[1]] = $value[2];
-            } else {
-                self::$blocks[$value[1]] = str_replace('@parent', self::$blocks[$value[1]], $value[2]);
-            }
-            $code = str_replace($value[0], '', $code);
-        }
-        return $code;
-    }
 
     static function compileYield($code): string
     {
