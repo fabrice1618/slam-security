@@ -45,7 +45,7 @@ class Router
                 }
             }
         }
-        else if ( !file_exists(/*le path du controller*/) ) 
+        else if ( !file_exists($this->controllerPath) ) 
         {
             $this->controllerName = 'NotFound';
             $urlParams = [];
@@ -61,7 +61,8 @@ class Router
         }
         else
         {
-            return true;
+            $this->controllerName = 'NotFound';
+            return false;
         }
     }
     
