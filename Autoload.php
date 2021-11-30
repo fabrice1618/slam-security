@@ -1,19 +1,19 @@
 <?php 
-
+require_once('Settings.php');
 spl_autoload_register( function($className){
 
-    global $basePath;
+    $BASE_PATH = Settings::BASE_PATH;
 
-    if(!isset($basePath)){
+    if(!isset($BASE_PATH)){
         throw new \Exception("Autoload Exception : Basepath not defined", 1);
     }
 
-    $dirList = ['view', 'model', 'controller'];
+    $dirList = ['view', 'model', 'controller', 'utils'];
 
     $classLoaded = false;
 
     foreach($dirList as $dirName){
-        $file = $basePath.'/'.$dirName.'/'.$className.'.php';
+        $file = $BASE_PATH.'/'.$dirName.'/'.$className.'.php';
 
         if( !$classLoaded && file_exists($file) ){
             $classLoaded = true;
