@@ -7,7 +7,12 @@ class NotFoundController implements Controller
      */
     public function loadView()
     {
-        $viewManager = new ViewManager();
-        $viewManager->loadView("notFound-template", []);
+
+        ViewManager::view("notFound-template", []);
+    }
+
+    public function default()
+    {
+        // TODO: Implement default() method.
     }
 }

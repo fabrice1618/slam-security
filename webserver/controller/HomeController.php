@@ -7,6 +7,11 @@ class HomeController implements Controller
      */
     public function loadView()
     {
-        ViewManager::loadView("home-template", []);
+        ViewManager::view("home-template", []);
+    }
+
+    public function default()
+    {
+        // TODO: Implement default() method.
     }
 }

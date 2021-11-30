@@ -17,7 +17,7 @@ class AuthController implements Controller
         $password = ParamUtils::findPOSTParam('password');
 
         if (empty($username) || empty($password)) {
-            ViewManager::loadView("login-template",
+            ViewManager::view("login-template",
                 ["ERROR_MESSAGE" => "Empty credentials",
                     "HIDDEN" => ""]);
         }
@@ -28,7 +28,7 @@ class AuthController implements Controller
             $_COOKIE["token"] = md5($user->getUsername() . ":" . $user->getPassword());
             header("Location:home");
         }
-        ViewManager::loadView("login-template",
+        ViewManager::view("login-template",
             ["ERROR_MESSAGE" => "",
                 "HIDDEN" => "hidden"]);
     }
@@ -47,4 +47,8 @@ class AuthController implements Controller
     }
 
 
+    public function default()
+    {
+        // TODO: Implement default() method.
+    }
 }
