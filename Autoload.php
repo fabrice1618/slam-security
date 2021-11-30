@@ -1,8 +1,8 @@
 <?php 
-
+require_once('Settings.php');
 spl_autoload_register( function($className){
 
-    $basePath = Settings::BASEPATH;
+    $BASE_PATH = Settings::BASE_PATH;
 
     if(!isset($BASE_PATH)){
         throw new \Exception("Autoload Exception : Basepath not defined", 1);

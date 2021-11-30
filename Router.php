@@ -74,15 +74,15 @@ class Router
         }
         else
         {
-            return true;
-            //appeller la méthode par défaut
+            $this->actionName = 'default';
+            return false;
         }
     }
     
     //fonction qui
     private function setControllerPath()
     {
-        $this->controllerPath = Settings::BASEPATH . 'controller/' . $this->controllerName . 'Controller.php';
+        $this->controllerPath = Settings::BASE_PATH . 'controller/' . $this->controllerName . 'Controller.php';
     }
 
     //fonction qui permet de vérifier si le cookie est valide 
@@ -95,7 +95,6 @@ class Router
         else
         {
             Router::redirectTo('login','login');
-
         }
     }
     
@@ -118,6 +117,4 @@ class Router
         $this->controller->$this->actionName();
     }
 }
-
-// catch les exeptions revoyées du Controller
-// Voir pour call un action par défaut si il n'y a pas d'action , créer un controller par défaut maybe
+// catch les exeptions renvoyées du Controller
