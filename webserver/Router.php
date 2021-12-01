@@ -27,30 +27,33 @@ class Router
     }
     private function routing()
     {
-        // $this->isConnected();
-        $this->decodeUrl();
-        $this->setControllerPath();
-        if($this->isControllerExist())
-        {
-            $this->callController();
-            
-            if($this->isActionExist())
+
+        if($this->isConnected()){
+            $this->decodeUrl();
+            $this->setControllerPath();
+            if($this->isControllerExist())
             {
-                $this->callAction();
-            }
-            else if($this->actionName == '')
-            {
-                Router::redirectTo($this->controllerName);
+                $this->callController();
+                
+                if($this->isActionExist())
+                {
+                    $this->callAction();
+                }
+                else if($this->actionName === '')
+                {
+                    Router::redirectTo($this->controllerName);
+                }
+                else
+                {
+                    Router::redirectTo('NotFound');
+                }
             }
             else
             {
                 Router::redirectTo('NotFound');
             }
         }
-        else
-        {
-            Router::redirectTo('NotFound');
-        }
+        
     }
 
     //CA FONCTIONNEEEEEEEEEEEEEEEEEEEEEEEE
@@ -103,7 +106,7 @@ class Router
         }
         else
         {
-            $this->controllerName = 'NotFound';
+            Router::redirectTo('NotFound');
             return false;
         }
     }
@@ -130,15 +133,16 @@ class Router
     }
 
     //fonction qui permet de vérifier si le cookie est valide 
-    private function isConnected()
+    private function isConnected() : bool
     {
         if(true)
         {
-            //rediriger l'url la view du Controller demandé
+            return true;
         }
         else
         {
             Router::redirectTo('Login');
+            return false;
         }
     }
     
