@@ -2,7 +2,7 @@
 
 require_once("ViewManager.php");
 
-class NotFoundController implements Controller
+class NotFoundController extends Controller
 {
     /**
      * @throws Exception

@@ -2,7 +2,7 @@
 
 require_once("ViewManager.php");
 
-class HomeController implements Controller
+class HomeController extends Controller
 {
     /**
      * @throws Exception
