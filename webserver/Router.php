@@ -61,15 +61,16 @@ class Router
     {
         if($this->currentUrl === '/')
         {
-            Router::redirectTo('home');
+            Router::redirectTo('Home');
         }
         else
         {
-        $this->url_split = explode("/", substr( $this->currentUrl, 1) );
-        if (empty($url_split[0])) 
+        $this->url_split = explode("/", substr( $this->currentUrl, 1) ); 
+        var_dump($this->url_split);
+        if ($this->url_split[0] || !empty($this->url_split[0])) 
         {
             $this->controllerName = $this->url_split[0];
-            if (empty($url_split[1])) 
+            if ($this->url_split[1] || !empty($this->url_split[1])) 
             {
                 $this->actionName = $this->url_split[1];
                 for( $i=2; $i < count($this->url_split); $i++ ) 
@@ -83,14 +84,15 @@ class Router
             $this->controllerName = 'NotFoundController';
             $urlParams = [];
         }
+        
+        }
     }
-}
 
     //reste à voir comment on fait pour le cas ou le controller existe pas
     //fonction permettant de tester si un controller existe
     public function isControllerExist() : bool
     {
-        if (class_exists($this->controllerName)) 
+        if (class_exists($this->controllerName))
         {
             return true;
         }
@@ -119,7 +121,8 @@ class Router
     //fonction qui
     private function setControllerPath()
     {
-        $this->controllerPath = Settings::BASE_PATH . '/controller/' . $this->controllerName . 'Controller.php';    }
+        $this->controllerPath = Settings::BASE_PATH . '/controller/' . $this->controllerName . 'Controller.php';    
+    }
 
     //fonction qui permet de vérifier si le cookie est valide 
     private function isConnected()
@@ -130,7 +133,7 @@ class Router
         }
         else
         {
-            Router::redirectTo('login');
+            Router::redirectTo('Login');
         }
     }
     
@@ -153,10 +156,9 @@ class Router
         else
         {
             $this->controllerFullName = $this->controllerName . "Controller";
-        }   
+        }
         $this->controller = new $this->controllerFullName();
     }
-    
     
     private function callAction()
     {
