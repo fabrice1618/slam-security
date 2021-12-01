@@ -12,8 +12,6 @@ class Router
     private array $url_split;
     private array $urlParams;
 
-    var_dump()
-
     public function __construct()
     {
         $this->urlParams = [];
