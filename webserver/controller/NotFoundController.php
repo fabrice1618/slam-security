@@ -1,6 +1,5 @@
 <?php
 
-require_once("ViewManager.php");
 
 class NotFoundController extends Controller
 {

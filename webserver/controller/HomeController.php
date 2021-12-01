@@ -1,7 +1,5 @@
 <?php
 
-require_once("ViewManager.php");
-
 class HomeController extends Controller
 {
     /**
