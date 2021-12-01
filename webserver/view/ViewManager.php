@@ -15,7 +15,6 @@ class ViewManager
         echo $code;
     }
 
-
     static function compileCode($code): string
     {
         $code = self::compileYield($code);
@@ -48,7 +47,6 @@ class ViewManager
     {
         return preg_replace('~\{{{\s*(.+?)\s*\}}}~is', '<?php echo htmlentities($1, ENT_QUOTES, \'UTF-8\') ?>', $code);
     }
-
 
     static function compileYield($code): string
     {
