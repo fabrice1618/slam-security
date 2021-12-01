@@ -1,5 +1,5 @@
 <?php
-//declare(strict_types=1);
+declare(strict_types=1);
 session_start();
 
 class AuthController extends Controller
@@ -29,8 +29,7 @@ class AuthController extends Controller
             header("Location:home");
         }
         ViewManager::view("login-template",
-            ["ERROR_MESSAGE" => "",
-                "HIDDEN" => "hidden"]);
+            ["ERROR_MESSAGE" => ""]);
     }
 
     public function logout(): void

@@ -12,6 +12,8 @@ class Router
     private array $url_split;
     private array $urlParams;
 
+    var_dump()
+
     public function __construct()
     {
         $this->urlParams = [];
@@ -30,34 +32,48 @@ class Router
         // $this->isConnected();
         $this->decodeUrl();
         $this->setControllerPath();
-        if($this->isControllerExist()){
+        
+        if($this->isControllerExist())
+        {
             $this->callController();
             
             if($this->isActionExist())
             {
                 $this->callAction();
             }
+            else if($this->actionName == '')
+            {
+                Router::redirectTo($this->controllerName);
+            }
             else
             {
                 Router::redirectTo('NotFound');
-            }
 
+            }
         }
-        else{
+        else
+        {
             Router::redirectTo('NotFound');
         }
-       
     }
 
     //CA FONCTIONNEEEEEEEEEEEEEEEEEEEEEEEE
     //fonction permettant décoder la route et permet d'en déduire la route et l'action
     private function decodeUrl()
     {
+        if($this->currentUrl === '/')
+        {
+            Router::redirectTo('home');
+        }
+        else
+        {
         $this->url_split = explode("/", substr( $this->currentUrl, 1) );
-        if (empty($url_split[2])) {
-            $this->controllerName = $this->url_split[2];
-            if (empty($url_split[3])) {
-                $this->actionName = $this->url_split[3];
+        if (empty($url_split[0])) 
+        {
+            $this->controllerName = $this->url_split[0];
+            if (empty($url_split[1])) 
+            {
+                $this->actionName = $this->url_split[1];
                 for( $i=2; $i < count($this->url_split); $i++ ) 
                 {
                     array_push($this->urlParams, $i );
@@ -70,6 +86,7 @@ class Router
             $urlParams = [];
         }
     }
+}
 
     //reste à voir comment on fait pour le cas ou le controller existe pas
     //fonction permettant de tester si un controller existe
@@ -149,6 +166,7 @@ class Router
         $this->controller->$actualActionName();
     }
 }
+
 // catch les exceptions renvoyées du Controller
 
 
