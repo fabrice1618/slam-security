@@ -3,25 +3,18 @@
 class CommentController extends Controller
 {
 
-    public function load()
-    {
-
-        $action = ParamUtils::findGETParam('action');
-    }
 
     public function loadView()
     {
         echo file_get_contents('view/CommentView.php');
+        $comments = [];
+        ViewManager::view("comment-template", ["comments" => $comments]);
     }
 
-    public function getFormInfo()
-    {
-
-    }
 
     public function default()
     {
-        // TODO: Implement default() method.
+        $this->loadView();
     }
 }
 
