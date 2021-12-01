@@ -1,5 +1,7 @@
 <?php
 
+require_once("ViewManager.php");
+
 class HomeController implements Controller
 {
     /**
