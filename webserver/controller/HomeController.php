@@ -12,6 +12,6 @@ class HomeController extends Controller
 
     public function default()
     {
-        // TODO: Implement default() method.
+        $this->loadView();
     }
 }
