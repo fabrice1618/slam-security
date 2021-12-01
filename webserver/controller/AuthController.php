@@ -2,7 +2,7 @@
 //declare(strict_types=1);
 session_start();
 
-class AuthController implements Controller
+class AuthController extends Controller
 {
     /**
      * @throws Exception

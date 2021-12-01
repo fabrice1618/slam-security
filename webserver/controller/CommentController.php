@@ -1,6 +1,6 @@
 <?php
 
-class CommentController implements Controller
+class CommentController extends Controller
 {
 
     public function load()
