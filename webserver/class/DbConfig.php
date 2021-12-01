@@ -6,13 +6,13 @@
 class DBConfig
 {
     // Constantes - valeurs par défaut
-    private const DBCONFIG_FILE = 'dbconfig.json';
-    private const DBCONFIG_HOST = 'localhost';
-    private const DBCONFIG_DBNAME = 'databasename';
-    private const DBCONFIG_CHARSET = 'utf8';
-    private const DBCONFIG_USER = 'user';
-    private const DBCONFIG_PASSWORD = 'password';
-    private const DBCONFIG_OPTIONS = array(PDO::ATTR_PERSISTENT => true);
+    public const DBCONFIG_FILE = 'dbconfig.json';
+    public const DBCONFIG_HOST = 'localhost';
+    public const DBCONFIG_DBNAME = 'slam_security';
+    public const DBCONFIG_CHARSET = 'utf8';
+    public const DBCONFIG_USER = 'slamuser';
+    public const DBCONFIG_PASSWORD = 'test';
+    public const DBCONFIG_OPTIONS = array(PDO::ATTR_PERSISTENT => true);
 
     private const DBCONFIG_FIELDLIST = array('host', 'databasename', 'charset', 'user', 'password', 'options');
 
@@ -98,6 +98,9 @@ class DBConfig
         return($value);
     }
 
+    public function getDbHost(){
+        return $this->DBCONFIG_HOST;
+    }
 }
 
 
