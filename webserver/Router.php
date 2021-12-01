@@ -30,11 +30,26 @@ class Router
         // $this->isConnected();
         $this->decodeUrl();
         $this->setControllerPath();
-        // $this->isControllerExist();
-        // $this->callController();
-        // $this->isActionExist();
-        // $this->callAction();
+        if($this->isControllerExist()){
+            $this->callController();
+            
+            if($this->isActionExist())
+            {
+                $this->callAction();
+            }
+            else
+            {
+                Router::redirectTo('NotFound');
+            }
+
+        }
+        else{
+            Router::redirectTo('NotFound');
+        }
+       
     }
+
+    //CA FONCTIONNEEEEEEEEEEEEEEEEEEEEEEEE
     //fonction permettant décoder la route et permet d'en déduire la route et l'action
     private function decodeUrl()
     {
@@ -51,11 +66,12 @@ class Router
         }
         else if (!file_exists($this->controllerPath))
         {
-            // $this->controllerName = 'NotFound';
-            // $urlParams = [];
+            $this->controllerName = 'NotFoundController';
+            $urlParams = [];
         }
     }
-    
+
+    //reste à voir comment on fait pour le cas ou le controller existe pas
     //fonction permettant de tester si un controller existe
     public function isControllerExist() : bool
     {
@@ -65,7 +81,7 @@ class Router
         }
         else
         {
-            $this->controllerName = 'NotFound';
+            $this->controllerName = 'NotFoundController';
             return false;
         }
     }
@@ -84,42 +100,63 @@ class Router
         }
     }
     
+    //CA FONCTIONNEEEEEEEEEEEEEEEEEEEEEEEEEE
     //fonction qui
     private function setControllerPath()
     {
-        $this->controllerPath = Settings::BASE_PATH . 'controller/' . $this->controllerName . 'Controller.php';
+        $this->controllerPath = Settings::BASE_PATH . '/controller/' . $this->controllerName . 'Controller.php';    }
 
-        var_dump($this->controllerPath);
-    }
     //fonction qui permet de vérifier si le cookie est valide 
     private function isConnected()
     {
         if(true)
         {
-            //rediriger l'url la view du Controller demander
+            //rediriger l'url la view du Controller demandé
         }
         else
         {
-            Router::redirectTo('login','login');
+            Router::redirectTo('login');
         }
     }
     
-    static function redirectTo(string $controllerToRedirect, string $actionToRedirect)
+    //CA FONTIONNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    static function redirectTo(string $controllerToRedirect, string $actionToRedirect = 'default')
     {
         $controllerToRedirect = $controllerToRedirect . "Controller";
         $controller = new $controllerToRedirect();
         $controller->$actionToRedirect();
     }
     
+    //CA FONTIONNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     private function callController()
     {
-        $this->controllerFullName = $this->controllerName . "Controller";
+        if($this->controllerName === 'controller')
+        {
+            // Router::redirectTo('NotFound','default');
+            $this->controllerFullName = "Controller";
+        }
+        else
+        {
+            $this->controllerFullName = $this->controllerName . "Controller";
+        }   
         $this->controller = new $this->controllerFullName();
     }
+    
+    
     private function callAction()
     {
-        // $this->controller->{$this->actionName}($this->urlParams);
-        $this->controller->$this->actionName();
+        $actualActionName  = $this->actionName;
+        $this->controller->$actualActionName();
     }
 }
 // catch les exceptions renvoyées du Controller
+
+
+/* ===========================================
+ *                  TODO LIST
+ * =========================================== */
+
+//rettester tout le code avec un autre controller
+
+// faire un cookie http pour l'authent
+// Gérer l'exception quand il y a pas d'action
