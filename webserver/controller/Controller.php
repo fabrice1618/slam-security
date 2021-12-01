@@ -1,6 +1,9 @@
 <?php
 
-interface Controller
+class Controller
 {
-    public function default();
+    public function default()
+    {
+        
+    }
 }

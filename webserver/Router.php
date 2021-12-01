@@ -15,9 +15,11 @@ class Router
     public function __construct()
     {
         $this->urlParams = [];
+        $this->controllerPath = '';
+        $this->controllerFullName = '';
         $this->controller = new Controller();
         $this->url_split = [];
-        $this->currentUrl = $_POST;
+        $this->currentUrl = $_SERVER['REQUEST_URI'];
         $this->actionName ='';
         $this->controllerName = '';
         $this->route = $_SERVER ['REDIRECT_URL'];
@@ -25,30 +27,32 @@ class Router
     }
     private function routing()
     {
+        // $this->isConnected();
         $this->decodeUrl();
-        $this->isControllerExist();
-        $this->callController();
-        $this->isActionExist();
-        $this->callAction();
+        $this->setControllerPath();
+        // $this->isControllerExist();
+        // $this->callController();
+        // $this->isActionExist();
+        // $this->callAction();
     }
     //fonction permettant décoder la route et permet d'en déduire la route et l'action
     private function decodeUrl()
     {
         $this->url_split = explode("/", substr( $this->currentUrl, 1) );
-        if (!empty($url_split[0])) {
-            $this->controllerName = $this->url_split[0];
-            if (!empty($url_split[1])) {
-                $this->actionName = $this->url_split[1];
+        if (empty($url_split[2])) {
+            $this->controllerName = $this->url_split[2];
+            if (empty($url_split[3])) {
+                $this->actionName = $this->url_split[3];
                 for( $i=2; $i < count($this->url_split); $i++ ) 
                 {
                     array_push($this->urlParams, $i );
                 }
             }
         }
-        else if ( !file_exists($this->controllerPath) ) 
+        else if (!file_exists($this->controllerPath))
         {
-            $this->controllerName = 'NotFound';
-            $urlParams = [];
+            // $this->controllerName = 'NotFound';
+            // $urlParams = [];
         }
     }
     
@@ -84,12 +88,13 @@ class Router
     private function setControllerPath()
     {
         $this->controllerPath = Settings::BASE_PATH . 'controller/' . $this->controllerName . 'Controller.php';
-    }
 
+        var_dump($this->controllerPath);
+    }
     //fonction qui permet de vérifier si le cookie est valide 
-    private function isConnected($cookie)
+    private function isConnected()
     {
-        if($cookie === true )
+        if(true)
         {
             //rediriger l'url la view du Controller demander
         }
@@ -111,11 +116,10 @@ class Router
         $this->controllerFullName = $this->controllerName . "Controller";
         $this->controller = new $this->controllerFullName();
     }
-
     private function callAction()
     {
         // $this->controller->{$this->actionName}($this->urlParams);
         $this->controller->$this->actionName();
     }
 }
-// catch les exeptions renvoyées du Controller
+// catch les exceptions renvoyées du Controller
