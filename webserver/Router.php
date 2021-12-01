@@ -30,7 +30,6 @@ class Router
         // $this->isConnected();
         $this->decodeUrl();
         $this->setControllerPath();
-        
         if($this->isControllerExist())
         {
             $this->callController();
@@ -46,7 +45,6 @@ class Router
             else
             {
                 Router::redirectTo('NotFound');
-
             }
         }
         else
@@ -66,10 +64,11 @@ class Router
         else
         {
         $this->url_split = explode("/", substr( $this->currentUrl, 1) ); 
-        var_dump($this->url_split);
         if ($this->url_split[0] || !empty($this->url_split[0])) 
         {
             $this->controllerName = $this->url_split[0];
+            if (sizeof($this->url_split) > 1) 
+            {
             if ($this->url_split[1] || !empty($this->url_split[1])) 
             {
                 $this->actionName = $this->url_split[1];
@@ -78,10 +77,16 @@ class Router
                     array_push($this->urlParams, $i );
                 }
             }
+            else
+            {
+                $this->actionName = 'default';
+            }
+
+        }
         }
         else if (!file_exists($this->controllerPath))
         {
-            $this->controllerName = 'NotFoundController';
+            $this->controllerName = 'NotFound';
             $urlParams = [];
         }
         
@@ -92,13 +97,13 @@ class Router
     //fonction permettant de tester si un controller existe
     public function isControllerExist() : bool
     {
-        if (class_exists($this->controllerName))
+        if (class_exists($this->controllerName,false))
         {
             return true;
         }
         else
         {
-            $this->controllerName = 'NotFoundController';
+            $this->controllerName = 'NotFound';
             return false;
         }
     }
@@ -150,11 +155,11 @@ class Router
     {
         if($this->controllerName === 'controller')
         {
-            // Router::redirectTo('NotFound','default');
-            $this->controllerFullName = "Controller";
+            Router::redirectTo('NotFound');
         }
         else
         {
+            var_dump('on est la');
             $this->controllerFullName = $this->controllerName . "Controller";
         }
         $this->controller = new $this->controllerFullName();
