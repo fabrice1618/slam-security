@@ -1,7 +1,5 @@
 <?php
 
-require_once("ViewManager.php");
-
 class HomeController extends Controller
 {
     /**
@@ -12,8 +10,11 @@ class HomeController extends Controller
         ViewManager::view("home-template", []);
     }
 
+    /**
+     * @throws Exception
+     */
     public function default()
     {
-        // TODO: Implement default() method.
+        $this->loadView();
     }
 }

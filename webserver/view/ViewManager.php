@@ -15,7 +15,6 @@ class ViewManager
         echo $code;
     }
 
-
     static function compileCode($code): string
     {
         $code = self::compileYield($code);
@@ -29,7 +28,8 @@ class ViewManager
         $code = file_get_contents($file);
         preg_match_all('/{% ?(extends|include) ?\'?(.*?)\'? ?%}/i', $code, $matches, PREG_SET_ORDER);
         foreach ($matches as $value) {
-            $code = str_replace($value[0], self::includeFiles($value[2]), $code);
+            $pathToExtends = "./view/templates/" . $value[2] . ".html";
+            $code = str_replace($value[0], self::includeFiles($pathToExtends), $code);
         }
         return preg_replace('/{% ?(extends|include) ?\'?(.*?)\'? ?%}/i', '', $code);
     }
@@ -44,11 +44,10 @@ class ViewManager
         return preg_replace('~\{{\s*(.+?)\s*\}}~is', '<?php echo $1 ?>', $code);
     }
 
-    static function compileEscapedEchos($code): array|string|null
+    static function compileEscapedEchos($code): string
     {
         return preg_replace('~\{{{\s*(.+?)\s*\}}}~is', '<?php echo htmlentities($1, ENT_QUOTES, \'UTF-8\') ?>', $code);
     }
-
 
     static function compileYield($code): string
     {

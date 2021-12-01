@@ -5,8 +5,8 @@ class CommentController extends Controller
 
     public function load()
     {
+
         $action = ParamUtils::findGETParam('action');
-        loadView();
     }
 
     public function loadView()

@@ -1,5 +1,5 @@
 <?php
-//declare(strict_types=1);
+declare(strict_types=1);
 session_start();
 
 class AuthController extends Controller
@@ -11,7 +11,7 @@ class AuthController extends Controller
     {
 
         if (isset($_SESSION['utilisateur_id'])) {
-            // TODO call router for redirection to home page
+            Router::redirectTo('home');
         }
         $username = ParamUtils::findPOSTParam('username');
         $password = ParamUtils::findPOSTParam('password');
@@ -29,8 +29,7 @@ class AuthController extends Controller
             header("Location:home");
         }
         ViewManager::view("login-template",
-            ["ERROR_MESSAGE" => "",
-                "HIDDEN" => "hidden"]);
+            ["ERROR_MESSAGE" => ""]);
     }
 
     public function logout(): void
@@ -38,7 +37,7 @@ class AuthController extends Controller
         session_destroy();
         unset($_COOKIE["token"]);
         header("Location:login");
-        // TODO call router for redirection to login page
+        Router::redirectTo('login');
     }
 
     private function checkCredentials(string $username, string $password): bool
@@ -49,6 +48,9 @@ class AuthController extends Controller
 
     public function default()
     {
-        // TODO: Implement default() method.
+        $this->login();
+    }
+    public function createCookie(){
+        setcookie('auth',"",3600, "","",false,true);
     }
 }
