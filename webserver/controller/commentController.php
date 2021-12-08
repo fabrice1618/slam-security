@@ -8,7 +8,7 @@ class CommentController extends Controller
     {
         $bdd = new Database();
         $bdd->connect();
-        $comments = [];
+        $comments = ["comment"=>["title"=>"test"]];
         ViewManager::view("comment-template", ["comments" => $comments]);
     }
 

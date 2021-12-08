@@ -15,7 +15,7 @@
 {% extends navbar-template %}
 <div class="container-lg col-lg-3">
 
-    <form action="" method="GET">
+    <form method="POST">
         <label for="fname">Title :</label><br>
         <input type="text" id="ftitle" value="title"><br><br>
         <label for="lname">Content :</label><br>
@@ -25,9 +25,9 @@
 
     {% foreach($comments as $com) %}
     <div class="comment">
-        <div class="title">{{$com->title}}</div>
-        <div class="content">{{$com->content}}</div>
-        <div class="author">{{$com->author}}</div>
+        <div class="title">{{$com }}</div>
+        <div class="content">{{$com }}</div>
+        <div class="author">{{$com}}</div>
     </div>
     {% endforeach %}
 

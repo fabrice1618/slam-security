@@ -3,38 +3,30 @@
 class Database
 {
 
-        private $dbHost;
-        private $dbName ;
-        private $dbCharset;
-        private $dbUser;
-        private $dbPassWord;
-        private $dbConfig;
+    private DbConfig $dbConfig;
+    private $db;
 
     public function __construct()
     {
         $this->dbConfig = new DbConfig();
-        $this->dbHost = $this->dbConfig->getHost();
-        $this->dbName = $this->dbConfig->getDBName();
-        $this->dbCharset = $this->dbConfig->getCharset();
-        $this->dbUser = $this->dbConfig->getUser();
-        $this->dbPassWord = $this->dbConfig->getPassword();
     }
 
-    public function connect(){
-
-        
-        try
-        {
-            $db = new PDO('mysql:host='.$this->dbHost.';dbname='.$this->dbName.';charset=utf8', $this->dbUser, $this->dbPassWord);
+    public function connect()
+    {
+        try {
+            $this->db = new PDO('mysql:host=' . $this->dbConfig->getUser() .
+                ';dbname=' . $this->dbConfig->getDBName() .
+                ';charset=' . $this->dbConfig->getCharset(),
+                $this->dbConfig->getUser(),
+                $this->dbConfig->getPassword());
             echo "les nullos";
-        }
-        catch (Exception $e)
-        {
-                die('Erreur : ' . $e->getMessage());
+        } catch (Exception $e) {
+            die('Erreur : ' . $e->getMessage());
         }
     }
 
-    public function getConnection(){
-        return $db;
+    public function getConnection()
+    {
+        return $this->db;
     }
 }

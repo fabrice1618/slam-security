@@ -2,14 +2,14 @@
 
 class DbConfig
 {
-    private $dataJson;
-    public const DBCONFIG_FILE = 'dbconfig.json';
-    public $DBCONFIG_HOST;
-    public $DBCONFIG_DBNAME;
-    public $DBCONFIG_CHARSET;
-    public $DBCONFIG_USER ;
-    public $DBCONFIG_PASSWORD;
-    public $DBCONFIG_OPTIONS = array(PDO::ATTR_PERSISTENT => true);
+    private mixed $dataJson;
+    public const  DBCONFIG_FILE = 'dbconfig.json';
+    public mixed $DBCONFIG_HOST;
+    public mixed $DBCONFIG_DBNAME;
+    public mixed $DBCONFIG_CHARSET;
+    public mixed $DBCONFIG_USER;
+    public mixed $DBCONFIG_PASSWORD;
+    public array $DBCONFIG_OPTIONS = array(PDO::ATTR_PERSISTENT => true);
 
     public function __construct()
     {
@@ -26,27 +26,38 @@ class DbConfig
 
         $sConfig = file_get_contents($sDBConfigFile);
         $aConfigDB = json_decode($sConfig, true);
-        
-        return($aConfigDB);
+
+        return ($aConfigDB);
     }
 
-    public function getHost() {
-        return($this->DBCONFIG_HOST);
+    public function getHost()
+    {
+        return ($this->DBCONFIG_HOST);
     }
-    public function getDBName() {
-        return($this->DBCONFIG_DBNAME);
+
+    public function getDBName()
+    {
+        return ($this->DBCONFIG_DBNAME);
     }
-    public function getCharset() {
-        return($this->DBCONFIG_CHARSET);
+
+    public function getCharset()
+    {
+        return ($this->DBCONFIG_CHARSET);
     }
-    public function getUser() {
-        return($this->DBCONFIG_USER);
+
+    public function getUser()
+    {
+        return ($this->DBCONFIG_USER);
     }
-    public function getPassword() {
-        return($this->DBCONFIG_PASSWORD);
+
+    public function getPassword()
+    {
+        return ($this->DBCONFIG_PASSWORD);
     }
-    public function getOptions() {
-        return($this->DBCONFIG_OPTIONS);
+
+    public function getOptions()
+    {
+        return ($this->DBCONFIG_OPTIONS);
     }
 
 }
