@@ -1,13 +1,36 @@
 <?php
 declare(strict_types=1);
 session_start();
+class User{
 
-class AuthController extends Controller
-{
-    private User $user;
     private string $password;
     private string $username;
     private string $id;
+    public function __construct(){
+        $this->username = 'admin';
+        $this->password = 'admin';
+        $this->id = '1';
+    }
+    public getUsername(): string{
+        return $this->username;
+    }
+    public getPassword(): string{
+        return $this->password;
+    }
+    public getId(): number{
+        return $this->id;
+    }
+}
+class AuthController extends Controller
+{
+    private User $user;
+
+
+    public function __construct()
+    {
+        $this->user = new User();
+
+    }
     /**
      * @throws Exception
      */
@@ -57,7 +80,8 @@ class AuthController extends Controller
     public function createCookie(){
         setcookie('auth',"",3600, "","",false,true);
     }
-    public function getUser(string $username, string $password): User
+
+    public function getUser(string $username, string $password) : User
     {
         $user = new User();
         $user->getUsername($username);
