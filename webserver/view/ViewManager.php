@@ -5,10 +5,11 @@ class ViewManager
 {
 
     static array $blocks = array();
+    private const  BASE_PATH_TEMPLATE = "./view/templates/";
 
     static function view($file, $data = array())
     {
-        $file = "./view/templates/" . $file . ".html";
+        $file = self::BASE_PATH_TEMPLATE . $file . ".html";
         $code = self::includeFiles($file);
         $code = self::compileCode($code);
         extract($data, EXTR_SKIP);
@@ -28,7 +29,7 @@ class ViewManager
         $code = file_get_contents($file);
         preg_match_all('/{% ?(extends|include) ?\'?(.*?)\'? ?%}/i', $code, $matches, PREG_SET_ORDER);
         foreach ($matches as $value) {
-            $pathToExtends = "./view/templates/" . $value[2] .".html";
+            $pathToExtends = self::BASE_PATH_TEMPLATE . $value[2] . ".html";
             $code = str_replace($value[0], self::includeFiles($pathToExtends), $code);
         }
         return preg_replace('/{% ?(extends|include) ?\'?(.*?)\'? ?%}/i', '', $code);
