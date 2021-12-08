@@ -1,9 +1,9 @@
 <?php
 
-class DbConfigTest
+class DbConfig
 {
     private $dataJson;
-    public const DBCONFIG_FILE = '../dbconfig.json';
+    public const DBCONFIG_FILE = 'dbconfig.json';
     public $DBCONFIG_HOST;
     public $DBCONFIG_DBNAME;
     public $DBCONFIG_CHARSET;
@@ -13,7 +13,7 @@ class DbConfigTest
 
     public function __construct()
     {
-        $this->dataJson = $this->readJSONConfig(DbConfigTest::DBCONFIG_FILE);
+        $this->dataJson = $this->readJSONConfig(DbConfig::DBCONFIG_FILE);
         $this->DBCONFIG_HOST = $this->dataJson['host'];
         $this->DBCONFIG_DBNAME = $this->dataJson['databasename'];
         $this->DBCONFIG_CHARSET = $this->dataJson['charset'];
