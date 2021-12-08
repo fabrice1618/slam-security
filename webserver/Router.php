@@ -107,8 +107,14 @@ class Router
     {
         if (method_exists($this->controller, $this->actionName)) {
             return true;
-        } else {
+        }
+        else if($this->actionName === "" || $this->actionName === null)
+        {
             $this->actionName = 'default';
+            return true;
+        }
+        else 
+        {
             return false;
         }
     }
