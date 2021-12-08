@@ -25,10 +25,11 @@ class ViewManager
 
     static function includeFiles($file): string
     {
-        $code = file_get_contents($file);
+        $fileToInclude =   $file;
+        $code = file_get_contents($fileToInclude);
         preg_match_all('/{% ?(extends|include) ?\'?(.*?)\'? ?%}/i', $code, $matches, PREG_SET_ORDER);
         foreach ($matches as $value) {
-            $pathToExtends = "./view/templates/" . $value[2] . ".html";
+            $pathToExtends = "./view/templates/" . $value[2] ;
             $code = str_replace($value[0], self::includeFiles($pathToExtends), $code);
         }
         return preg_replace('/{% ?(extends|include) ?\'?(.*?)\'? ?%}/i', '', $code);
