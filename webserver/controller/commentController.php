@@ -13,6 +13,7 @@ class CommentController extends Controller
 
     public function default()
     {
+        echo "view";
         $this->loadView();
     }
 }

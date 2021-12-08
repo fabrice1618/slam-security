@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
+
 class Router
 {
     private string $currentUrl;
@@ -19,143 +20,117 @@ class Router
         $this->controller = new Controller();
         $this->url_split = [];
         $this->currentUrl = $_SERVER['REQUEST_URI'];
-        $this->actionName ='';
+        $this->actionName = '';
         $this->controllerName = '';
         $this->routing();
     }
+
     private function routing()
     {
-        if($this->isConnected()){
-            if($this->decodeUrl()){
+        if ($this->isConnected()) {
+            if ($this->decodeUrl()) {
+
                 $this->setControllerPath();
-                if($this->isControllerExist())
-                {
+                if ($this->isControllerExist()) {
+
                     $this->callController();
-                    
-                    if($this->isActionExist())
-                    {
+
+                    if ($this->isActionExist()) {
                         $this->callAction();
-                    }
-                    else if($this->actionName === '')
-                    {
+                    } else if ($this->actionName === '') {
                         Router::redirectTo($this->controllerName);
                         return;
-                    }
-                    else
-                    {
+                    } else {
                         Router::redirectTo('NotFound');
                         return;
                     }
-                }
-                else
-                {
+                } else {
                     Router::redirectTo('NotFound');
                     return;
                 }
             }
 
         }
-        
+
     }
 
     //CA FONCTIONNEEEEEEEEEEEEEEEEEEEEEEEE
     //fonction permettant décoder la route et permet d'en déduire la route et l'action
-    private function decodeUrl() : bool
+    private function decodeUrl(): bool
     {
-        if($this->currentUrl === '/')
-        {
+        if ($this->currentUrl === '/') {
             Router::redirectTo('Home');
             return false;
-        }
-        else
-        {
-        $this->url_split = explode("/", substr( $this->currentUrl, 1) ); 
-        if ($this->url_split[0] || !empty($this->url_split[0])) 
-        {
-            $this->controllerName = $this->url_split[0];
-            if (sizeof($this->url_split) > 1) 
-            {
-                $this->controllerName =  $this->controllerName . "Controller";
-                if (isset($this->url_split[1]))
-                {
-                    $this->actionName = $this->url_split[1];
-                    for( $i=2; $i < count($this->url_split); $i++ ) 
-                    {
-                        array_push($this->urlParams, $i );
+        } else {
+            $this->url_split = explode("/", substr($this->currentUrl, 1));
+            if ($this->url_split[0] || !empty($this->url_split[0])) {
+                $this->controllerName = $this->url_split[0];
+                $this->controllerName = $this->controllerName . "Controller";
+                if (sizeof($this->url_split) > 1) {
+                    if (isset($this->url_split[1])) {
+                        $this->actionName = $this->url_split[1];
+                        for ($i = 2; $i < count($this->url_split); $i++) {
+                            array_push($this->urlParams, $i);
+                        }
+                        return true;
+                    } else {
+                        $this->actionName = 'default';
+                        return true;
                     }
-                    return true;
-                }
-                else
-                {
+                } else {
                     $this->actionName = 'default';
                     return true;
                 }
+            } else if (!file_exists($this->controllerPath)) {
+                Router::redirectTo('NotFound');
+                return false;
             }
-            else{
-                $this->actionName = 'default';
-                return true;
-            }
-        }
-        else if (!file_exists($this->controllerPath))
-        {
-            Router::redirectTo('NotFound');
-            return false;
-        }
-        
+
         }
         return false;
     }
 
     //reste à voir comment on fait pour le cas ou le controller existe pas
     //fonction permettant de tester si un controller existe
-    public function isControllerExist() : bool
+    public function isControllerExist(): bool
     {
-        if (class_exists($this->controllerName,false))
-        {
+        if (class_exists(  $this->controllerName)) {
             return true;
-        }
-        else
-        {
+        } else {
             Router::redirectTo('NotFound');
             return false;
         }
     }
-    
+
     //fonction permetant de vérifier si l'action existe
-    public function isActionExist() : bool
+    public function isActionExist(): bool
     {
-        if (method_exists($this->controller,$this->actionName)) 
-        {
+        if (method_exists($this->controller, $this->actionName)) {
             return true;
-        }
-        else
-        {
+        } else {
             $this->actionName = 'default';
             return false;
         }
     }
-    
+
     //CA FONCTIONNEEEEEEEEEEEEEEEEEEEEEEEEEE
     //fonction qui
     private function setControllerPath()
     {
-        $this->controllerPath = Settings::BASE_PATH . '/controller/' . $this->controllerName . 'Controller.php';    
+        $this->controllerPath = Settings::BASE_PATH . '/controller/' . $this->controllerName . 'Controller.php';
     }
 
     //fonction qui permet de vérifier si le cookie est valide 
-    private function isConnected() : bool
+    private function isConnected(): bool
     {
-        if(true)
-        {
+        if (true) {
             return true;
-        }
-        else
-        {
+        } else {
             Router::redirectTo('Login');
             return false;
         }
     }
-    
+
     //CA FONTIONNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     static function redirectTo(string $controllerToRedirect, string $actionToRedirect = 'default')
     {
@@ -163,24 +138,21 @@ class Router
         $controller = new $controllerToRedirect();
         $controller->$actionToRedirect();
     }
-    
+
     //CA FONTIONNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     private function callController()
     {
-        if($this->controllerName === 'controller')
-        {
+        if ($this->controllerName === 'controller') {
             Router::redirectTo('NotFound');
-        }
-        else
-        {
-            $this->controllerFullName = $this->controllerName . "Controller";
+        } else {
+            $this->controllerFullName = $this->controllerName;
         }
         $this->controller = new $this->controllerFullName();
     }
-    
+
     private function callAction()
     {
-        $actualActionName  = $this->actionName;
+        $actualActionName = $this->actionName;
         $this->controller->$actualActionName();
     }
 }
