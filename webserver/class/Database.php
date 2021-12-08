@@ -1,7 +1,5 @@
 <?php
 
-require_once("DbConfig.php");
-
 class Database
 {
 
@@ -12,9 +10,8 @@ class Database
         private $dbPassWord;
         private $dbConfig;
 
-    public function __construct(){
-
-
+    public function __construct()
+    {
         $this->dbConfig = new DbConfig();
         $this->dbHost = $this->dbConfig->getHost();
         $this->dbName = $this->dbConfig->getDBName();
