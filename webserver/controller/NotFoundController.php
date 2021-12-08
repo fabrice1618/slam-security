@@ -8,7 +8,7 @@ class NotFoundController extends Controller
      */
     public function loadView()
     {
-        ViewManager::view("notFound-template", ["PAGE_NOT_FOUND" => ""]);
+        ViewManager::view("notFound-template", []);
     }
 
     /**
