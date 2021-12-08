@@ -6,13 +6,16 @@ class NotFoundController extends Controller
     /**
      * @throws Exception
      */
-    public function loadView(string $pageNoteFound)
+    public function loadView()
     {
         ViewManager::view("notFound-template", ["PAGE_NOT_FOUND" => $pageNoteFound]);
     }
 
+    /**
+     * @throws Exception
+     */
     public function default()
     {
-        // TODO: Implement default() method.
+        $this->loadView();
     }
 }
