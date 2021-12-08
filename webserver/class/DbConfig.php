@@ -1,107 +1,54 @@
 <?php
 
-/* Classe DBConfig: configuration database avec un fichier JSON
-*/
-
-class DBConfig
+class DbConfigTest
 {
-    // Constantes - valeurs par défaut
-    public const DBCONFIG_FILE = 'dbconfig.json';
-    public const DBCONFIG_HOST = 'localhost';
-    public const DBCONFIG_DBNAME = 'slam_security';
-    public const DBCONFIG_CHARSET = 'utf8';
-    public const DBCONFIG_USER = 'slamuser';
-    public const DBCONFIG_PASSWORD = 'test';
-    public const DBCONFIG_OPTIONS = array(PDO::ATTR_PERSISTENT => true);
+    private $dataJson;
+    public const DBCONFIG_FILE = '../dbconfig.json';
+    public $DBCONFIG_HOST;
+    public $DBCONFIG_DBNAME;
+    public $DBCONFIG_CHARSET;
+    public $DBCONFIG_USER ;
+    public $DBCONFIG_PASSWORD;
+    public $DBCONFIG_OPTIONS = array(PDO::ATTR_PERSISTENT => true);
 
-    private const DBCONFIG_FIELDLIST = array('host', 'databasename', 'charset', 'user', 'password', 'options');
-
-    private $dbconfig = array();
-
-    public function __construct($sDBConfigFile = '')
+    public function __construct()
     {
-        global $oApp;
-
-        if ($sDBConfigFile === '') {
-            $sDBConfigFile = $oApp->base_path . self::DBCONFIG_FILE;
-        } else {
-            $sDBConfigFile = $oApp->base_path . $sDBConfigFile;
-        }
-
-        if (file_exists($sDBConfigFile)) {
-            $this->dbconfig = $this->readJSONConfig($sDBConfigFile);
-        } else {
-            self::writeJSONConfigDefault($sDBConfigFile);
-            throw new \Exception("DBConfig: config file not exist $sDBConfigFile", 1);
-        }
+        $this->dataJson = $this->readJSONConfig(DbConfigTest::DBCONFIG_FILE);
+        $this->DBCONFIG_HOST = $this->dataJson['host'];
+        $this->DBCONFIG_DBNAME = $this->dataJson['databasename'];
+        $this->DBCONFIG_CHARSET = $this->dataJson['charset'];
+        $this->DBCONFIG_USER = $this->dataJson['user'];
+        $this->DBCONFIG_PASSWORD = $this->dataJson['password'];
     }
 
     private function readJSONConfig(string $sDBConfigFile)
     {
-        $aReturn = array();
 
         $sConfig = file_get_contents($sDBConfigFile);
         $aConfigDB = json_decode($sConfig, true);
-
-        if ( ! is_null($aConfigDB) && self::checkParameters($aConfigDB) ) {
-            $aReturn = $aConfigDB;
-        }
-
-        return($aReturn);
+        
+        return($aConfigDB);
     }
 
-    // Verifie que les champs nécessaires sont configurés
-    private function checkParameters($aConfig)
-    {
-        $lReturn = false;
-
-        foreach(self::DBCONFIG_FIELDLIST as $sField) {
-            if ( isset($aConfig[$sField]) ) {
-                $lReturn = true;
-            } else {
-                throw new \Exception("DBConfig: parameter $sField is null", 1);
-            }
-        }
-
-        return($lReturn);
+    public function getHost() {
+        return($this->DBCONFIG_HOST);
+    }
+    public function getDBName() {
+        return($this->DBCONFIG_DBNAME);
+    }
+    public function getCharset() {
+        return($this->DBCONFIG_CHARSET);
+    }
+    public function getUser() {
+        return($this->DBCONFIG_USER);
+    }
+    public function getPassword() {
+        return($this->DBCONFIG_PASSWORD);
+    }
+    public function getOptions() {
+        return($this->DBCONFIG_OPTIONS);
     }
 
-    // Ecris un fichier contenant une configuration type
-    private function writeJSONConfigDefault(string $sDBConfigFile)
-    {
-
-        $aConfigDB['host'] = self::DBCONFIG_HOST;
-        $aConfigDB['databasename'] = self::DBCONFIG_DBNAME;
-        $aConfigDB['charset'] = self::DBCONFIG_CHARSET;
-        $aConfigDB['user'] = self::DBCONFIG_USER;
-        $aConfigDB['password'] = self::DBCONFIG_PASSWORD;
-        $aConfigDB['options'] = self::DBCONFIG_OPTIONS;
-
-        $sConfig = json_encode($aConfigDB,JSON_PRETTY_PRINT);
-        file_put_contents($sDBConfigFile, $sConfig );
-    }
-
-    public function __get($sName)
-    {
-        $value = '';
-        if (array_key_exists($sName, $this->dbconfig)) {
-            $value = $this->dbconfig[$sName];
-        } elseif ($sName === 'dsn') {
-            $value = sprintf(
-                'mysql:host=%s;dbname=%s;charset=%s',
-                $this->dbconfig['host'],
-                $this->dbconfig['databasename'],
-                $this->dbconfig['charset']
-                );
-        }
-
-        return($value);
-    }
-
-    public function getDbHost(){
-        return $this->DBCONFIG_HOST;
-    }
 }
 
 
-?>

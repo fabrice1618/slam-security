@@ -2,7 +2,7 @@
     "host": "localhost",
     "databasename": "slam_security",
     "charset": "utf8",
-    "user": "slam_security_user",
-    "password": "",
+    "user": "slamuser",
+    "password": "test",
     "options": {}
 }

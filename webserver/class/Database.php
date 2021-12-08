@@ -4,23 +4,28 @@ require_once("DbConfig.php");
 
 class Database
 {
-        private $dbHost = DbConfig::DBCONFIG_HOST;
-        private $dbName = DbConfig::DBCONFIG_DBNAME;
-        private $dbCharset =DbConfig::DBCONFIG_CHARSET;
-        private $dbUser = DbConfig::DBCONFIG_USER;
-        private $dbPassWord = DbConfig::DBCONFIG_PASSWORD;
+
+        private $dbHost;
+        private $dbName ;
+        private $dbCharset;
+        private $dbUser;
+        private $dbPassWord;
+        private $dbConfig;
 
     public function __construct(){
-        //$this->$dbHost = $dbHost;
-        //$this->$dbName = $dbName;
-        //$this->$dbUser = $dbUser;
-        //$this->$dbPassWord = $dbPassWord;
+
+
+        $this->dbConfig = new DbConfig();
+        $this->dbHost = $this->dbConfig->getHost();
+        $this->dbName = $this->dbConfig->getDBName();
+        $this->dbCharset = $this->dbConfig->getCharset();
+        $this->dbUser = $this->dbConfig->getUser();
+        $this->dbPassWord = $this->dbConfig->getPassword();
     }
 
     public function connect(){
 
         
-        //echo $this->$dbHost;
         try
         {
             $db = new PDO('mysql:host='.$this->dbHost.';dbname='.$this->dbName.';charset=utf8', $this->dbUser, $this->dbPassWord);
