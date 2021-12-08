@@ -110,13 +110,12 @@ class Router
     //fonction permettant de tester si un controller existe
     public function isControllerExist() : bool
     {
-        if (class_exists($this->controllerName,false))
+        if (class_exists($this->controllerName))
         {
             return true;
         }
         else
         {
-            Router::redirectTo('NotFound');
             return false;
         }
     }
@@ -139,7 +138,7 @@ class Router
     //fonction qui
     private function setControllerPath()
     {
-        $this->controllerPath = Settings::BASE_PATH . '/controller/' . $this->controllerName . 'Controller.php';    
+        $this->controllerPath = Settings::BASE_PATH . '/controller/' . $this->controllerName . '.php';    
     }
 
     //fonction qui permet de vérifier si le cookie est valide 
@@ -167,14 +166,14 @@ class Router
     //CA FONTIONNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     private function callController()
     {
-        if($this->controllerName === 'controller')
-        {
-            Router::redirectTo('NotFound');
-        }
-        else
-        {
-            $this->controllerFullName = $this->controllerName . "Controller";
-        }
+        // if($this->controllerName === 'controller')
+        // {
+        //     Router::redirectTo('NotFound');
+        // }
+        // else
+        // {
+            $this->controllerFullName = $this->controllerName;
+        // }
         $this->controller = new $this->controllerFullName();
     }
     
