@@ -81,7 +81,8 @@ class Router
                     $this->actionName = 'default';
                     return true;
                 }
-            } else if (!file_exists($this->controllerPath)) {
+            } 
+            else{
                 Router::redirectTo('NotFound');
                 return false;
             }
@@ -94,10 +95,9 @@ class Router
     //fonction permettant de tester si un controller existe
     public function isControllerExist(): bool
     {
-        if (class_exists(  $this->controllerName)) {
+        if (class_exists($this->controllerName,false)) {
             return true;
         } else {
-            Router::redirectTo('NotFound');
             return false;
         }
     }
