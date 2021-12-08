@@ -4,6 +4,10 @@ session_start();
 
 class AuthController extends Controller
 {
+    private User $user;
+    private string $password;
+    private string $username;
+    private string $id;
     /**
      * @throws Exception
      */
@@ -23,8 +27,8 @@ class AuthController extends Controller
         }
 
         if ($this->checkCredentials($username, $password)) {
-            $user = getUser($username, $password);
-            $_SESSION['utilisateur_id'] = $user->getUserId();
+            $user = $this->getUser($username, $password);
+            $_SESSION['utilisateur_id'] = $user->getId();
             $_COOKIE["token"] = md5($user->getUsername() . ":" . $user->getPassword());
             header("Location:home");
         }
@@ -38,6 +42,7 @@ class AuthController extends Controller
         unset($_COOKIE["token"]);
         header("Location:login");
         Router::redirectTo('login');
+        unset($this);
     }
 
     private function checkCredentials(string $username, string $password): bool
@@ -45,12 +50,18 @@ class AuthController extends Controller
         return true;
     }
 
-
     public function default()
     {
         $this->login();
     }
     public function createCookie(){
         setcookie('auth',"",3600, "","",false,true);
+    }
+    public function getUser(string $username, string $password): User
+    {
+        $user = new User();
+        $user->getUsername($username);
+        $user->getPassword($password);
+        return $user;
     }
 }

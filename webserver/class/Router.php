@@ -6,19 +6,15 @@ class Router
     private string $currentUrl;
     private Controller $controller;
     private string $controllerName;
-    private string $controllerFullName;
     private string $controllerPath;
     private string $actionName;
-    private array $url_split;
     private array $urlParams;
 
     public function __construct()
     {
         $this->urlParams = [];
         $this->controllerPath = '';
-        $this->controllerFullName = '';
         $this->controller = new Controller();
-        $this->url_split = [];
         $this->currentUrl = $_SERVER['REQUEST_URI'];
         $this->actionName = '';
         $this->controllerName = '';
@@ -49,27 +45,30 @@ class Router
                     return;
                 }
             }
-
         }
-
+        else{
+            Router::redirectTo('auth','login');
+            return;
+        }
     }
 
     //CA FONCTIONNEEEEEEEEEEEEEEEEEEEEEEEE
     //fonction permettant décoder la route et permet d'en déduire la route et l'action
     private function decodeUrl(): bool
     {
+        $url_split = [];
         if ($this->currentUrl === '/') {
             Router::redirectTo('Home');
             return false;
         } else {
-            $this->url_split = explode("/", substr($this->currentUrl, 1));
-            if ($this->url_split[0] || !empty($this->url_split[0])) {
-                $this->controllerName = $this->url_split[0];
+            $url_split = explode("/", substr($this->currentUrl, 1));
+            if ($url_split[0] || !empty($url_split[0])) {
+                $this->controllerName = $url_split[0];
                 $this->controllerName = $this->controllerName . "Controller";
-                if (sizeof($this->url_split) > 1) {
-                    if (isset($this->url_split[1])) {
-                        $this->actionName = $this->url_split[1];
-                        for ($i = 2; $i < count($this->url_split); $i++) {
+                if (sizeof($url_split) > 1) {
+                    if (isset($url_split[1])) {
+                        $this->actionName = $url_split[1];
+                        for ($i = 2; $i < count($url_split); $i++) {
                             array_push($this->urlParams, $i);
                         }
                         return true;
@@ -140,6 +139,8 @@ class Router
     //CA FONTIONNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
     static function redirectTo(string $controllerToRedirect, string $actionToRedirect = 'default')
     {
+        //kill l'ancien controller
+        unset($this->controller);
         $controllerToRedirect = $controllerToRedirect . "Controller";
         $controller = new $controllerToRedirect();
         $controller->$actionToRedirect();
@@ -151,13 +152,14 @@ class Router
         if ($this->controllerName === 'controller') {
             Router::redirectTo('NotFound');
         } else {
-            $this->controllerFullName = $this->controllerName;
+            $controllerFullName = $this->controllerName;
         }
-        $this->controller = new $this->controllerFullName();
+        $this->controller = new $controllerFullName();
     }
 
     private function callAction()
     {
+        //kill l'objet base
         $actualActionName = $this->actionName;
         $this->controller->$actualActionName();
     }
