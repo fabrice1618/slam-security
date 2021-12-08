@@ -75,23 +75,26 @@ class Router
             $this->controllerName = $this->url_split[0];
             if (sizeof($this->url_split) > 1) 
             {
-            $this->controllerName =  $this->controllerName . "Controller";
-            if (isset($this->url_split[1]))
-            {
-                $this->actionName = $this->url_split[1];
-                for( $i=2; $i < count($this->url_split); $i++ ) 
+                $this->controllerName =  $this->controllerName . "Controller";
+                if (isset($this->url_split[1]))
                 {
-                    array_push($this->urlParams, $i );
+                    $this->actionName = $this->url_split[1];
+                    for( $i=2; $i < count($this->url_split); $i++ ) 
+                    {
+                        array_push($this->urlParams, $i );
+                    }
+                    return true;
                 }
-                return true;
+                else
+                {
+                    $this->actionName = 'default';
+                    return true;
+                }
             }
-            else
-            {
+            else{
                 $this->actionName = 'default';
                 return true;
             }
-
-        }
         }
         else if (!file_exists($this->controllerPath))
         {
