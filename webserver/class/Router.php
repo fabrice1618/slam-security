@@ -1,6 +1,15 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Router de l'application
+ * @property string $currentUrl
+ * @property Controller $controller
+ * @property string $controllerName
+ * @property string $controllerPath
+ * @property string $actionName
+ * @property array $urlParams
+ */
 class Router
 {
     private string $currentUrl;
@@ -9,7 +18,11 @@ class Router
     private string $controllerPath;
     private string $actionName;
     private array $urlParams;
-
+    
+    /**
+     * Constructeur de la classe Router
+     * @return void
+     */
     public function __construct()
     {
         $this->urlParams = [];
@@ -20,7 +33,11 @@ class Router
         $this->controllerName = '';
         $this->routing();
     }
-
+    
+    /**
+     * Méthode effectuant le routing de l'application
+     * @return void
+     */
     private function routing()
     {
         if ($this->isConnected()) {
@@ -52,8 +69,11 @@ class Router
         }
     }
 
-    //CA FONCTIONNEEEEEEEEEEEEEEEEEEEEEEEE
-    //fonction permettant décoder la route et permet d'en déduire la route et l'action
+    // TODO: à compléter pour gérer les paramètres dans l'URL
+    /**
+     * Méthode permettant décoder la route et permet d'en déduire le nom du controller et l'action associé
+     * @return bool
+     */
     private function decodeUrl(): bool
     {
         $url_split = [];
@@ -89,9 +109,11 @@ class Router
         }
         return false;
     }
-
-    //reste à voir comment on fait pour le cas ou le controller existe pas
-    //fonction permettant de tester si un controller existe
+    
+    /**
+     * Méthode permettant de tester si un controller existe
+     * @return bool
+     */
     public function isControllerExist(): bool
     {
         if (file_exists($this->controllerPath)) {
@@ -101,7 +123,11 @@ class Router
         }
     }
 
-    //fonction permetant de vérifier si l'action existe
+        
+    /**
+     * Méthode permetant de vérifier si l'action existe dans le controller
+     * @return bool
+     */
     public function isActionExist(): bool
     {
         if (method_exists($this->controller, $this->actionName)) {
@@ -117,36 +143,47 @@ class Router
             return false;
         }
     }
-
-    //CA FONCTIONNEEEEEEEEEEEEEEEEEEEEEEEEEE
-    //fonction qui
+    
+    /**
+     * Méthode permettant de donner le chemin du controller à partir de son nom
+     * @return void
+     */
     private function setControllerPath()
     {
         $this->controllerPath = Settings::BASE_PATH . '/controller/' . $this->controllerName . '.php';
     }
-
-    //fonction qui permet de vérifier si le cookie est valide 
+    
+    /**
+     * Méthode qui vérifie si l'utilisateur est connecté
+     * @return bool
+     */
     private function isConnected(): bool
     {
-        if (true) {
+        if (true) { //AuthController::isLoggedIn();
             return true;
         } else {
             Router::redirectTo('Login');
             return false;
         }
     }
-
-    //CA FONTIONNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    
+    /**
+     * Méthode static du Router permettant de rediriger vers une page
+     * @param  string $controllerToRedirect
+     * @param  string $actionToRedirect [optional]
+     * @return void
+     */
     static function redirectTo(string $controllerToRedirect, string $actionToRedirect = 'default')
     {
-        //kill l'ancien controller
-        unset($this->controller);
         $controllerToRedirect = $controllerToRedirect . "Controller";
         $controller = new $controllerToRedirect();
         $controller->$actionToRedirect();
     }
-
-    //CA FONTIONNEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+    
+    /**
+     * Méthode permettant d'appeler le controller à partir de son nom
+     * @return void
+     */
     private function callController()
     {
         if ($this->controllerName === 'controller') {
@@ -156,23 +193,14 @@ class Router
         }
         $this->controller = new $controllerFullName();
     }
-
+    
+    /**
+     * Appelle l'action du controller instancié
+     * @return void
+     */
     private function callAction()
     {
-        //kill l'objet base
         $actualActionName = $this->actionName;
         $this->controller->$actualActionName();
     }
 }
-
-// catch les exceptions renvoyées du Controller
-
-
-/* ===========================================
- *                  TODO LIST
- * =========================================== */
-
-//rettester tout le code avec un autre controller
-
-// faire un cookie http pour l'authent
-// Gérer l'exception quand il y a pas d'action

@@ -5,19 +5,19 @@ class User{
 
     private string $password;
     private string $username;
-    private string $id;
+    private int $id;
     public function __construct(){
         $this->username = 'admin';
         $this->password = 'admin';
-        $this->id = '1';
+        $this->id = 1;
     }
-    public getUsername(): string{
+    public function getUsername(): string{
         return $this->username;
     }
-    public getPassword(): string{
+    public function getPassword(): string{
         return $this->password;
     }
-    public getId(): number{
+    public function getId(): int{
         return $this->id;
     }
 }
@@ -87,5 +87,9 @@ class AuthController extends Controller
         $user->getUsername($username);
         $user->getPassword($password);
         return $user;
+    }
+    static function isLoggedIn(): bool
+    {
+        return isset($_SESSION['utilisateur_id']);
     }
 }
