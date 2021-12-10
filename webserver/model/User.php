@@ -7,7 +7,7 @@ define('QUERY_SELECT', "SELECT * FROM user WHERE usr_id = :usr_id LIMIT 1" );
 define('QUERY_UPDATE', "UPDATE user SET usr_email = :usr_email, usr_password = :usr_password, usr_date_connexion = :usr_date_connexion, usr_role = :usr_role WHERE usr_id = :usr_id" );
 define('QUERY_DELETE', "DELETE FROM user WHERE usr_id = :usr_id " );
 define('QUERY_INDEX',  "SELECT * FROM user" );
-class UsersModel extends Model
+class User extends Model
 {
     const TABLENAME = 'users';
 
