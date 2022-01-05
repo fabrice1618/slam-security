@@ -6,14 +6,28 @@ class ViewManager
 
     static array $blocks = array();
     private const  BASE_PATH_TEMPLATE = "./view/templates/";
+    static string $cache_path = 'cache/';
+    static bool $cache_enabled = FALSE;
 
     static function view($file, $data = array())
     {
         $file = self::BASE_PATH_TEMPLATE . $file . ".html";
-        $code = self::includeFiles($file);
-        $code = self::compileCode($code);
+        $cached_file = self::cache($file);
         extract($data, EXTR_SKIP);
-        echo $code;
+        require $cached_file;
+    }
+
+    static function cache($file): string {
+        if (!file_exists(self::$cache_path)) {
+            mkdir(self::$cache_path, 0744);
+        }
+        $cached_file = self::$cache_path . str_replace(array('/', '.html'), array('_', ''), $file . '.php');
+        if (!self::$cache_enabled || !file_exists($cached_file) || filemtime($cached_file) < filemtime($file)) {
+            $code = self::includeFiles($file);
+            $code = self::compileCode($code);
+            file_put_contents($cached_file, '<?php class_exists(\'' . __CLASS__ . '\') or exit; ?>' . PHP_EOL . $code);
+        }
+        return $cached_file;
     }
 
     static function compileCode($code): string

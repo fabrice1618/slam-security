@@ -22,15 +22,18 @@
         <textarea type="text" id="fcontent" value="content"></textarea><br><br>
         <button type="submit" value="Submit">ChargePourBase</button>
     </form>
+    <div class="list-group list-group-flush">
 
-    {% foreach($comments as $com) %}
-    <div class="comment">
-        <div class="title">{{$com }}</div>
-        <div class="content">{{$com }}</div>
-        <div class="author">{{$com}}</div>
+        {% foreach($comments as $com): %}
+        <p class="list-group-item list-group-item">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ $com["title"] }}</h5>
+                <small>{{ $com["date"] }}</small>
+            </div>
+            <p class="mb-1">{{ $com["content"] }}</p>
+        </p>
+        {% endforeach; %}
     </div>
-    {% endforeach %}
-
 </div>
 
 <!-- Option 1: Bootstrap Bundle with Popper -->
