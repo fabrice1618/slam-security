@@ -1,35 +1,48 @@
-CREATE TABLE Types(
-   ID_Type INT AUTO_INCREMENT,
-   Type VARCHAR(50),
-   PRIMARY KEY(ID_Type)
-);
+CREATE DATABASE slam_security;
 
-CREATE TABLE Actives(
-   ID_Active INT AUTO_INCREMENT,
-   Active VARCHAR(50),
-   PRIMARY KEY(ID_Active)
-);
+CREATE TABLE `user`
+(
+    `id`       int(11)      NOT NULL,
+    `email`    varchar(255) NOT NULL,
+    `password` varchar(255) NOT NULL,
+    `role`     int(11)      NOT NULL
+) ENGINE = InnoDB
+  DEFAULT CHARSET = latin1;
 
-CREATE TABLE Users(
-   ID_User INT AUTO_INCREMENT,
-   Username VARCHAR(50),
-   Password VARCHAR(50),
-   Date_Creation DATE,
-   email VARCHAR(50),
-   prenom VARCHAR(50),
-   nom VARCHAR(50),
-   ID_Active INT NOT NULL,
-   ID_Type INT NOT NULL,
-   PRIMARY KEY(ID_User),
-   FOREIGN KEY(ID_Active) REFERENCES Actives(ID_Active),
-   FOREIGN KEY(ID_Type) REFERENCES Types(ID_Type)
-);
 
-CREATE TABLE Comments(
-   ID INT AUTO_INCREMENT,
-   Title VARCHAR(620),
-   Message VARCHAR(4000),
-   ID_User INT NOT NULL,
-   PRIMARY KEY(ID),
-   FOREIGN KEY(ID_User) REFERENCES Users(ID_User)
-);
+ALTER TABLE `user`
+    ADD PRIMARY KEY (`id`);
+    ADD FOREIGN KEY (`role`) REFERENCES role(`id`);
+ALTER TABLE `user`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,
+    AUTO_INCREMENT = 2;
+COMMIT;
+
+INSERT INTO `user` (`id`, `email`, `password`)
+VALUES (1, 'test@gmail.com', '098f6bcd4621d373cade4e832627b4f6');
+
+
+
+CREATE TABLE `comment`
+(
+    `id`       int(11)      NOT NULL,
+    `username` varchar(255) NOT NULL,
+    `comment`  text         NOT NULL,
+    `date`     datetime     NOT NULL
+) ENGINE = InnoDB
+  DEFAULT CHARSET = latin1;
+
+CREATE TABLE `role`
+(
+    `id`       int(11)      NOT NULL,
+    `libelle`  varchar(255) NOT NULL,
+) ENGINE = InnoDB
+  DEFAULT CHARSET = latin1;
+
+ALTER TABLE `comment`
+    ADD PRIMARY KEY (`id`);
+
+
+ALTER TABLE `comment`
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;

@@ -2,31 +2,28 @@
 
 class Database
 {
-
-    private DbConfig $dbConfig;
-    private $db;
+    private static ?Database $INSTANCE = null;
+    private static ?PDO $PDO;
 
     public function __construct()
     {
-        $this->dbConfig = new DbConfig();
-    }
-
-    public function connect()
-    {
+        $dbConfig = new DbConfig();
         try {
-            $this->db = new PDO('mysql:host=' . $this->dbConfig->getUser() .
-                ';dbname=' . $this->dbConfig->getDBName() .
-                ';charset=' . $this->dbConfig->getCharset(),
-                $this->dbConfig->getUser(),
-                $this->dbConfig->getPassword());
-            echo "les nullos";
+            self::$PDO = new PDO('mysql:host=' . $dbConfig->getUser() .
+                ';dbname=' . $dbConfig->getDBName() .
+                ';charset=' . $dbConfig->getCharset(),
+                $dbConfig->getUser(),
+                $dbConfig->getPassword());
         } catch (Exception $e) {
             die('Erreur : ' . $e->getMessage());
         }
     }
 
-    public function getConnection()
+    public function Connect()
     {
-        return $this->db;
+        if(is_null(self::$INSTANCE)){
+            self::$INSTANCE = new Databse();
+        }
+        return self::$PDO;
     }
 }

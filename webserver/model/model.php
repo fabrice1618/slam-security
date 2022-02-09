@@ -2,8 +2,6 @@
 declare(strict_types = 1);
 class Model
 {
-    private $table_definition = null;
-    private String $dbh;
 
     protected $data = [];
 
@@ -54,46 +52,11 @@ class Model
         return($lValid);
     }
 
-    public function toArray()
+    protected $data = [];
+
+    public function __construct()
     {
-        return($this->data);
+        $this->PDO = Database::Connect();
     }
-
-    public function toString()
-    {
-        return(json_encode($this->data));
-    }
-
-    protected function cleanTableDefinition($aInput)
-    {
-
-        if ( ! is_array($aInput) || count($aInput) == 0 ) {
-            throw new \Exception(__CLASS__.": table definition incorrecte", 1);
-        }
-
-        $aTableDefinition = array();
-
-        foreach ($aInput as $sChamp => $aParameters) {
-            
-            if ( isset($aParameters['valid']) && is_string($aParameters['valid']) && !empty($aParameters['valid']) ) {
-                $aParameters['valid'] === $aParameters['valid'];
-            } else {
-                $aParameters['valid'] = "Valid::alwaysTrue";
-            }
-
-            $aParameters['default'] = $aParameters['default'] ?? null;
-
-            if ( !isset($aParameters['pdo_type']) ) {
-                $aParameters['pdo_type'] = PDO::PARAM_STR;
-            }
-
-            // Parametres normalisés
-            $aTableDefinition[$sChamp] = $aParameters;                
-        }
-
-        return($aTableDefinition);
-    }
-
-    
 
 }

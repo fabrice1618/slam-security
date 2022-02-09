@@ -1,53 +1,14 @@
 <?php
 declare(strict_types = 1);
-// Utilisation de define pour définir les requetes
-define('QUERY_INSERT', "INSERT INTO user (usr_id, usr_email, usr_password, usr_date_connexion, usr_role) VALUES (NULL, :usr_email, :usr_password, :usr_date_connexion, :usr_role) " );
-define('QUERY_SELECT', "SELECT * FROM user WHERE usr_id = :usr_id LIMIT 1" );
-//define('QUERY_SELECT_EMAIL',  "SELECT * FROM user WHERE usr_email = :usr_email LIMIT 1" );
-define('QUERY_UPDATE', "UPDATE user SET usr_email = :usr_email, usr_password = :usr_password, usr_date_connexion = :usr_date_connexion, usr_role = :usr_role WHERE usr_id = :usr_id" );
-define('QUERY_DELETE', "DELETE FROM user WHERE usr_id = :usr_id " );
-define('QUERY_INDEX',  "SELECT * FROM user" );
+
+const QUERY_INSERT = "INSERT INTO user (id, email, password, role) VALUES (NULL, :email, :password, :role) ";
+const QUERY_SELECT_BY_ID = "SELECT * FROM user WHERE id = :id LIMIT 1";
+const QUERY_SELECT_EMAIL = "SELECT * FROM user WHERE email = :email LIMIT 1";
+const QUERY_UPDATE = "UPDATE user SET email = :email, password = :password, role = :role, WHERE id = :id";
+const QUERY_DELETE = "DELETE FROM user WHERE id = :id ";
+
 class User extends Model
 {
-    const TABLENAME = 'users';
-
-
-    const USR_ACTIVE = [ 'active', 'inactive'];
-
-    const LISTE_CHAMPS = [
-        'id_user' => [ 
-            'valid' => 'Valid::checkId',
-            'default' => 0,
-            'pdo_type' => PDO::PARAM_INT,
-            //'autoincrement' => true,
-            'primary' => true
-        ],
-        'password' => [ 
-            'valid' => 'Valid::checkStr',
-            'default' => "",
-            'pdo_type' => PDO::PARAM_STR
-       ],
-        'email' => [ 
-            'valid' => 'Valid::checkEmail',
-            'default' => null,
-            'pdo_type' => PDO::PARAM_STR
-        ],
-        'prenom' => [ 
-            'valid' => 'Valid::checkStr',
-            'default' => "",
-            'pdo_type' => PDO::PARAM_STR
-        ],
-        'nom' => [ 
-            'valid' => 'Valid::checkStr',
-            'default' => "",
-            'pdo_type' => PDO::PARAM_STR
-        ],
-        'id_active' => [ 
-            'valid' => 'UsersModel::checkUsrActive',
-            'default' => 'inactive',
-            'pdo_type' => PDO::PARAM_STR
-            ]       
-    ];
 
     public function __construct()
     {
