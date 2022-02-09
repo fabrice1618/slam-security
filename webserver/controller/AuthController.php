@@ -1,34 +1,10 @@
 <?php
 declare(strict_types=1);
-session_start();
-class User{
 
-    private string $password;
-    private string $username;
-    private int $id;
-    public function __construct(){
-        $this->username = 'admin';
-        $this->password = 'admin';
-        $this->id = 1;
-    }
-    public function getUsername(): string{
-        return $this->username;
-    }
-    public function getPassword(): string{
-        return $this->password;
-    }
-    public function getId(): int{
-        return $this->id;
-    }
-}
 class AuthController extends Controller
 {
-    private User $user;
-
-
     public function __construct()
     {
-        $this->user = new User();
 
     }
     /**
@@ -36,60 +12,97 @@ class AuthController extends Controller
      */
     public function login(): void
     {
-
-        if (isset($_SESSION['utilisateur_id'])) {
+        if (isset($_SESSION['utilisateur_id']) && !empty($_SESSION['utilisateur_id']) && $_SESSION['utilisateur_id'] > 0) {
             Router::redirectTo('home');
         }
-        $username = ParamUtils::findPOSTParam('username');
-        $password = ParamUtils::findPOSTParam('password');
-
-        if (empty($username) || empty($password)) {
+        try {
+            $email = ParamUtils::findPOSTParam('email');
+            $password = ParamUtils::findPOSTParam('password');
+        } catch (\Exception $e) {
             ViewManager::view("login-template",
-                ["ERROR_MESSAGE" => "Empty credentials",
-                    "HIDDEN" => ""]);
+            ["ERROR_MESSAGE" => "Empty credentials",
+                "HIDDEN" => ""]);
         }
 
-        if ($this->checkCredentials($username, $password)) {
-            $user = $this->getUser($username, $password);
-            $_SESSION['utilisateur_id'] = $user->getId();
-            $_COOKIE["token"] = md5($user->getUsername() . ":" . $user->getPassword());
-            header("Location:home");
+        if ($this->checkCredentials($email, $password)) {
+            // $user = $this->getUser($email, $password);
+            // $_SESSION['utilisateur_id'] = $user->getId();
+            $_SESSION['utilisateur_id'] = 1;
+            Router::redirectTo('home');
         }
-        ViewManager::view("login-template",
-            ["ERROR_MESSAGE" => ""]);
+        else{
+            ViewManager::view("login-template",
+            ["ERROR_MESSAGE" => "Wrong credentials",
+                "HIDDEN" => ""]);
+        }
     }
-
+    public function loginView(): void
+    {
+        ViewManager::view("login-template",
+        ["ERROR_MESSAGE" => "",
+            "HIDDEN" => ""]);
+    }
+    
+    /**
+     * Method logout
+     *
+     * @return void
+     */
     public function logout(): void
     {
-        session_destroy();
-        unset($_COOKIE["token"]);
-        header("Location:login");
-        Router::redirectTo('login');
-        unset($this);
+        $_SESSION['utilisateur_id'] = 0;
+        Router::redirectTo('auth');
     }
-
-    private function checkCredentials(string $username, string $password): bool
+    
+    /**
+     * Method checkCredentials
+     *
+     * @param string $email [explicite description]
+     * @param string $password [explicite description]
+     *
+     * @return bool
+     */
+    private function checkCredentials(string $email, string $password): bool
     {
-        return true;
+        $password_hash = password_hash($password, PASSWORD_DEFAULT);
+        if(!empty(filter_var($email, FILTER_VALIDATE_EMAIL))){
+            // if ($password_hash === $this->user->getPassword() && $email === $this->user->getUsername()) {
+            //     return true;
+            // }
+            return true;
+        }
+        return false;
     }
-
+    
+    /**
+     * Method default
+     *
+     * @return void
+     */
     public function default()
     {
-        $this->login();
-    }
-    public function createCookie(){
-        setcookie('auth',"",3600, "","",false,true);
+        $this->loginView();
     }
 
-    public function getUser(string $username, string $password) : User
-    {
-        $user = new User();
-        $user->getUsername($username);
-        $user->getPassword($password);
-        return $user;
-    }
+    // public function getUser(string $username, string $password) : User
+    // {
+    //     $user = new User();
+    //     $user->getUsername($username);
+    //     $user->getPassword($password);
+    //     return $user;
+    // }    
+    /**
+     * Method isLoggedIn
+     *
+     * @return bool
+     */
     static function isLoggedIn(): bool
     {
-        return isset($_SESSION['utilisateur_id']);
+        if (isset($_SESSION['utilisateur_id']) && !empty($_SESSION['utilisateur_id']) && $_SESSION['utilisateur_id'] > 0) {
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 }

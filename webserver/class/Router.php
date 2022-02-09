@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+session_start();
 
 /**
  * Router de l'application
@@ -40,9 +41,11 @@ class Router
      */
     private function routing()
     {
-        if ($this->isConnected()) {
-            if ($this->decodeUrl()) {
-
+        if ($this->decodeUrl()) {
+            if(AuthController::isLoggedIn()){
+                if ($this->controllerName === 'authController' && $this->actionName !== 'logout') {
+                    Router::redirectTo('home');
+                }
                 $this->setControllerPath();
                 if ($this->isControllerExist()) {
 
@@ -62,10 +65,17 @@ class Router
                     return;
                 }
             }
+            else if($this->controllerName === "authController" && $this->actionName === "login"){
+
+                Router::redirectTo('auth','login');
+
+            }
+            else{
+                Router::redirectTo('auth');
+            }
         }
         else{
-            Router::redirectTo('auth','login');
-            return;
+            throw new Exception("Cannot decodeUrl", 1);
         }
     }
 
@@ -77,35 +87,29 @@ class Router
     private function decodeUrl(): bool
     {
         $url_split = [];
-        if ($this->currentUrl === '/') {
-            Router::redirectTo('Home');
-            return false;
-        } else {
-            $url_split = explode("/", substr($this->currentUrl, 1));
-            if ($url_split[0] || !empty($url_split[0])) {
-                $this->controllerName = $url_split[0];
-                $this->controllerName = $this->controllerName . "Controller";
-                if (sizeof($url_split) > 1) {
-                    if (isset($url_split[1])) {
-                        $this->actionName = $url_split[1];
-                        for ($i = 2; $i < count($url_split); $i++) {
-                            array_push($this->urlParams, $i);
-                        }
-                        return true;
-                    } else {
-                        $this->actionName = 'default';
-                        return true;
+        $url_split = explode("/", substr($this->currentUrl, 1));
+        if ($url_split[0] || !empty($url_split[0])) {
+            $this->controllerName = $url_split[0];
+            $this->controllerName = $this->controllerName . "Controller";
+            if (sizeof($url_split) > 1) {
+                if (isset($url_split[1])) {
+                    $this->actionName = $url_split[1];
+                    for ($i = 2; $i < count($url_split); $i++) {
+                        array_push($this->urlParams, $i);
                     }
+                    return true;
                 } else {
                     $this->actionName = 'default';
                     return true;
                 }
-            } 
-            else{
-                Router::redirectTo('NotFound');
-                return false;
+            } else {
+                $this->actionName = 'default';
+                return true;
             }
-
+        } 
+        else{
+            $this->controllerName = 'HomeController';
+            return true;
         }
         return false;
     }
@@ -151,20 +155,6 @@ class Router
     private function setControllerPath()
     {
         $this->controllerPath = Settings::BASE_PATH . '/controller/' . $this->controllerName . '.php';
-    }
-    
-    /**
-     * Méthode qui vérifie si l'utilisateur est connecté
-     * @return bool
-     */
-    private function isConnected(): bool
-    {
-        if (true) { //AuthController::isLoggedIn();
-            return true;
-        } else {
-            Router::redirectTo('Login');
-            return false;
-        }
     }
     
     /**
