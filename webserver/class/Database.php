@@ -9,7 +9,7 @@ class Database
     {
         $dbConfig = new DbConfig();
         try {
-            self::$PDO = new PDO('mysql:host=' . $dbConfig->getUser() .
+            self::$PDO = new PDO('mysql:host=' . $dbConfig->getHost() .
                 ';dbname=' . $dbConfig->getDBName() .
                 ';charset=' . $dbConfig->getCharset(),
                 $dbConfig->getUser(),
@@ -19,10 +19,10 @@ class Database
         }
     }
 
-    public function Connect()
+    public static function Connect()
     {
         if(is_null(self::$INSTANCE)){
-            self::$INSTANCE = new Databse();
+            self::$INSTANCE = new Database();
         }
         return self::$PDO;
     }

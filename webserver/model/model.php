@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 class Model
 {
-    private PDO $PDO;
+    protected PDO $PDO;
 
     public function __construct()
     {
