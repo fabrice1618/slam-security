@@ -1,5 +1,5 @@
 <?php
-require_once('Settings.php');
+require_once('class/Settings.php');
 spl_autoload_register( function($className){
 
     $BASE_PATH = Settings::BASE_PATH;
