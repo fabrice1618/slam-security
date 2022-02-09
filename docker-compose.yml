@@ -30,7 +30,13 @@ services:
       MYSQL_DB_HOST: dbflop:3306
       CATA_DB_USER: flopsecurity
       CATA_DB_PASSWORD: pwd_flopsecurity
-
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8088:80
+    environment:
+      - PMA_ARBITRARY=1
 volumes:
   db_data_flop:
 
