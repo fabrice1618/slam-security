@@ -8,8 +8,8 @@ class CommentController extends Controller
     {
         var_dump($_SERVER);
         $comment = new Comment();
-        $comments = $comment->read(5);
-        $comment->create();
+        $comments = $comment->read('LIMIT 5');
+        //$comment->create();
 
         $comments = [["username" => $comment->getUsername(), "content" => $content->getContent(), "date" => $content->getDate()]];
         ViewManager::view("comment-template", ["comments" => $comments]);
