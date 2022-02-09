@@ -7,7 +7,7 @@ class Model
 
     protected $data = [];
 
-    public function __construct( $aTableDefinition ) :
+    public function __construct( $aTableDefinition )
     {
         $this->table_definition = $this->cleanTableDefinition($aTableDefinition);
 
