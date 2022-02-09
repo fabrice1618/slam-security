@@ -3,7 +3,6 @@
 class DbConfig
 {
     private mixed $dataJson;
-    public const  DBCONFIG_FILE = 'dbconfig.json';
     public mixed $DBCONFIG_HOST;
     public mixed $DBCONFIG_DBNAME;
     public mixed $DBCONFIG_CHARSET;
@@ -13,7 +12,7 @@ class DbConfig
 
     public function __construct()
     {
-        $this->dataJson = $this->readJSONConfig(DbConfig::DBCONFIG_FILE);
+        $this->dataJson = $this->readJSONConfig('dbconfig.json');
         $this->DBCONFIG_HOST = $this->dataJson['host'];
         $this->DBCONFIG_DBNAME = $this->dataJson['databasename'];
         $this->DBCONFIG_CHARSET = $this->dataJson['charset'];
