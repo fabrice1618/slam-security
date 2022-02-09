@@ -2,18 +2,17 @@
 
 class DbConfig
 {
-    private mixed $dataJson;
-    public const  DBCONFIG_FILE = 'dbconfig.json';
-    public mixed $DBCONFIG_HOST;
-    public mixed $DBCONFIG_DBNAME;
-    public mixed $DBCONFIG_CHARSET;
-    public mixed $DBCONFIG_USER;
-    public mixed $DBCONFIG_PASSWORD;
+    private array $dataJson;
+    public string $DBCONFIG_HOST;
+    public string $DBCONFIG_DBNAME;
+    public string $DBCONFIG_CHARSET;
+    public string $DBCONFIG_USER;
+    public string $DBCONFIG_PASSWORD;
     public array $DBCONFIG_OPTIONS = array(PDO::ATTR_PERSISTENT => true);
 
     public function __construct()
     {
-        $this->dataJson = $this->readJSONConfig(DbConfig::DBCONFIG_FILE);
+        $this->dataJson = DbConfig::readJSONConfig('dbconfig.json');
         $this->DBCONFIG_HOST = $this->dataJson['host'];
         $this->DBCONFIG_DBNAME = $this->dataJson['databasename'];
         $this->DBCONFIG_CHARSET = $this->dataJson['charset'];
@@ -21,12 +20,12 @@ class DbConfig
         $this->DBCONFIG_PASSWORD = $this->dataJson['password'];
     }
 
-    private function readJSONConfig(string $sDBConfigFile)
+    public static function readJSONConfig(string $sDBConfigFile): array
     {
-
+        
         $sConfig = file_get_contents($sDBConfigFile);
         $aConfigDB = json_decode($sConfig, true);
-
+    
         return ($aConfigDB);
     }
 

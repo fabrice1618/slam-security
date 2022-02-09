@@ -8,11 +8,10 @@ class CommentController extends Controller
     {
         var_dump($_SERVER);
         $comment = new Comment();
-        $comments = $comment->read();
+        $comments = $comment->read(5);
         $comment->create();
 
-
-        $comments = [["title" => "je suis un titre", "content" => "contenu", "date" => "12/03/2000 12:10:02"]];
+        $comments = [["username" => $comment->getUsername(), "content" => $content->getContent(), "date" => $content->getDate()]];
         ViewManager::view("comment-template", ["comments" => $comments]);
     }
 
