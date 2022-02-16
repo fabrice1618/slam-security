@@ -44,21 +44,17 @@ class Router
         if ($this->decodeUrl()) {
             if(AuthController::isLoggedIn()){
                 if ($this->controllerName === 'authController' && $this->actionName !== 'logout') {
-                    Router::redirectTo('home');
+                    header('Location: /');
                 }
                 $this->setControllerPath();
                 if ($this->isControllerExist()) {
 
                     $this->callController();
-
                     if ($this->isActionExist()) {
                         $this->callAction();
-                    } else if ($this->actionName === '') {
-                        Router::redirectTo($this->controllerName);
-                        return;
                     } else {
                         Router::redirectTo('NotFound');
-                        return;
+                       return;
                     }
                 } else {
                     Router::redirectTo('NotFound');
@@ -66,12 +62,15 @@ class Router
                 }
             }
             else if($this->controllerName === "authController" && $this->actionName === "login"){
-
                 Router::redirectTo('auth','login');
-
+                return;
+            }
+            else if($this->controllerName === "authController"){
+                Router::redirectTo('auth');
+                return;
             }
             else{
-                Router::redirectTo('auth');
+                header('Location: /auth');
             }
         }
         else{
@@ -79,7 +78,6 @@ class Router
         }
     }
 
-    // TODO: à compléter pour gérer les paramètres dans l'URL
     /**
      * Méthode permettant décoder la route et permet d'en déduire le nom du controller et l'action associé
      * @return bool

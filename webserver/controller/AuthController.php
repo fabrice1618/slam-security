@@ -13,7 +13,7 @@ class AuthController extends Controller
     public function login(): void
     {
         if (isset($_SESSION['utilisateur_id']) && !empty($_SESSION['utilisateur_id']) && $_SESSION['utilisateur_id'] > 0) {
-            Router::redirectTo('home');
+            header('Location: /');
         }
         try {
             $email = ParamUtils::findPOSTParam('email');
@@ -28,7 +28,7 @@ class AuthController extends Controller
             // $user = $this->getUser($email, $password);
             // $_SESSION['utilisateur_id'] = $user->getId();
             $_SESSION['utilisateur_id'] = 1;
-            Router::redirectTo('home');
+            header('Location: /');
         }
         else{
             ViewManager::view("login-template",
@@ -51,7 +51,7 @@ class AuthController extends Controller
     public function logout(): void
     {
         $_SESSION['utilisateur_id'] = 0;
-        Router::redirectTo('auth');
+        header('Location: /auth');
     }
     
     /**
