@@ -170,4 +170,11 @@ class User extends Model
     {
         return ($email === $this->email && md5($password) === $this->password && $role === $this->role);
     }
+<<<<<<< Updated upstream
 }
+=======
+
+}
+
+
+>>>>>>> Stashed changes
