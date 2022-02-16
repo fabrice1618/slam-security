@@ -18,10 +18,9 @@ class Comment extends Model
     {
         $stmt1 = $this->PDO->prepare(QUERY_INSERT);
         $stmt1->bindValue(':username', $this->username);
-        $stmt1->bindValue(':title', $this->content);
+        $stmt1->bindValue(':title', $this->title);
         $stmt1->bindValue(':comment', $this->content);
         $stmt1->bindValue(':date', $this->date->format('Y-m-d H:i:s'), PDO::PARAM_STR);
-        $stmt1->bindValue(':title', $this->title);
         if ($stmt1->execute()) {
             $this->id = (int)$this->pdo->lastInsertId();
         }
