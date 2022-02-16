@@ -10,7 +10,7 @@ spl_autoload_register( function($className){
         throw new \Exception("Autoload Exception : Basepath not defined", 1);
     }
 
-    $dirList = ['view', 'model', 'controller', 'utils', 'class', 'tests'];
+    $dirList = ['view', 'model', 'controller', 'utils', 'class'];
 
     $classLoaded = false;
 

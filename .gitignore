@@ -1,3 +1,4 @@
 
 /mysql_log/*
 /webserver/cache/*
+/webserver/dbconfig.json

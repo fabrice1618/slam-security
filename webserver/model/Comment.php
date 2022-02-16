@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-const QUERY_INSERT = "INSERT INTO comment (id, username, comment,date, title) VALUES (NULL, :username, :comment,:date, :title) ";
+const QUERY_INSERT = "INSERT INTO comment (id, username, title, comment,date) VALUES (NULL, :username, :title, :comment,:date) ";
 const QUERY_DELETE = "DELETE FROM comment WHERE id = :id ";
 const QUERY_INDEX = "SELECT * FROM comment ";
 
@@ -10,6 +10,7 @@ class Comment extends Model
 {
     private int $id;
     private string $username;
+    private string $title;
     private string $content;
     private DateTime $date;
 
@@ -17,9 +18,9 @@ class Comment extends Model
     {
         $stmt1 = $this->PDO->prepare(QUERY_INSERT);
         $stmt1->bindValue(':username', $this->username);
+        $stmt1->bindValue(':title', $this->title);
         $stmt1->bindValue(':comment', $this->content);
         $stmt1->bindValue(':date', $this->date->format('Y-m-d H:i:s'), PDO::PARAM_STR);
-        $stmt1->bindValue(':title', $this->title);
         if ($stmt1->execute()) {
             $this->id = (int)$this->pdo->lastInsertId();
         }
@@ -36,6 +37,7 @@ class Comment extends Model
                 $comment = new Comment();
                 $comment->setId($row["id"]);
                 $comment->setUsername($row["username"]);
+                $comment->setTitle($row["title"]);
                 $comment->setContent($row["comment"]);
                 $comment->setDate(DateTime::createFromFormat('Y-m-d H:i:s', $row["date"]));
                 $comment->setTitle($row["title"]);
@@ -75,22 +77,6 @@ class Comment extends Model
     /**
      * @return string
      */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param string $title
-     */
-    public function setTitle(string $title): void
-    {
-        $this->title = $title;
-    }
-
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return $this->username;
@@ -102,6 +88,22 @@ class Comment extends Model
     public function setUsername(string $username): void
     {
         $this->username = $username;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $content
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 
     /**
