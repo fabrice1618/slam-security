@@ -5,7 +5,6 @@ class CommentController extends Controller
 
     public function loadView()
     {
-        var_dump($_SERVER);
         $comment = new Comment();
         $comments = $comment->read('LIMIT 5');
         

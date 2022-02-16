@@ -1,11 +1,7 @@
 <?php
 
 declare(strict_types=1);
-<<<<<<< Updated upstream
-const QUERY_INSERT = "INSERT INTO comment (id, username, comment,date, title) VALUES (NULL, :username, :comment,:date, :title) ";
-=======
 const QUERY_INSERT = "INSERT INTO comment (id, username, title, comment,date) VALUES (NULL, :username, :title, :comment,:date) ";
->>>>>>> Stashed changes
 const QUERY_DELETE = "DELETE FROM comment WHERE id = :id ";
 const QUERY_INDEX = "SELECT * FROM comment ";
 
@@ -77,22 +73,6 @@ class Comment extends Model
     public function setId(int $id): void
     {
         $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param string $title
-     */
-    public function setTitle(string $title): void
-    {
-        $this->title = $title;
     }
 
     /**
