@@ -24,7 +24,6 @@ class Comment extends Model
         }
     }
 
-
     public function read($limit): array
     {
         $comments = array();
