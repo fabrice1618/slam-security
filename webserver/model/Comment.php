@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-const QUERY_INSERT = "INSERT INTO comment (id, username, comment,date) VALUES (NULL, :username, :comment,:date) ";
+const QUERY_INSERT = "INSERT INTO comment (id, username, comment,date, title) VALUES (NULL, :username, :comment,:date, :title) ";
 const QUERY_DELETE = "DELETE FROM comment WHERE id = :id ";
 const QUERY_INDEX = "SELECT * FROM comment ";
 
@@ -19,6 +19,7 @@ class Comment extends Model
         $stmt1->bindValue(':username', $this->username);
         $stmt1->bindValue(':comment', $this->content);
         $stmt1->bindValue(':date', $this->date->format('Y-m-d H:i:s'), PDO::PARAM_STR);
+        $stmt1->bindValue(':title', $this->title);
         if ($stmt1->execute()) {
             $this->id = (int)$this->pdo->lastInsertId();
         }
@@ -37,6 +38,7 @@ class Comment extends Model
                 $comment->setUsername($row["username"]);
                 $comment->setContent($row["comment"]);
                 $comment->setDate(DateTime::createFromFormat('Y-m-d H:i:s', $row["date"]));
+                $comment->setTitle($row["title"]);
                 array_push($comments, $comment);
             }
         }
@@ -68,6 +70,22 @@ class Comment extends Model
     public function setId(int $id): void
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 
     /**

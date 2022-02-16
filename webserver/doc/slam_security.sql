@@ -11,6 +11,22 @@
 -- ---------------------------------------------------------
 
 
+-- CREATE TABLE "comment" --------------------------------------
+CREATE TABLE `comment`( 
+	`id` Int( 255 ) NOT NULL,
+	`username` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`comment` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	`date` DateTime NOT NULL,
+	`image_id` Int( 255 ) NOT NULL,
+	`title` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+	PRIMARY KEY ( `id` ),
+	CONSTRAINT `id` UNIQUE( `id` ) )
+CHARACTER SET = latin1
+COLLATE = latin1_swedish_ci
+ENGINE = InnoDB;
+-- -------------------------------------------------------------
+
+
 -- CREATE TABLE "role" -----------------------------------------
 CREATE TABLE `role`( 
 	`id` Int( 11 ) NOT NULL,
@@ -37,18 +53,21 @@ ENGINE = InnoDB;
 -- -------------------------------------------------------------
 
 
--- CREATE TABLE "comment" --------------------------------------
-CREATE TABLE `comment`( 
+-- CREATE TABLE "image" ----------------------------------------
+CREATE TABLE `image`( 
 	`id` Int( 255 ) NOT NULL,
-	`username` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`comment` Text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-	`date` DateTime NOT NULL,
+	`content` Blob NOT NULL,
+	`type` VarChar( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
 	PRIMARY KEY ( `id` ),
-	CONSTRAINT `id` UNIQUE( `id` ) )
+	CONSTRAINT `unique_id` UNIQUE( `id` ) )
 CHARACTER SET = latin1
 COLLATE = latin1_swedish_ci
 ENGINE = InnoDB;
 -- -------------------------------------------------------------
+
+
+-- Dump data of "comment" ----------------------------------
+-- ---------------------------------------------------------
 
 
 -- Dump data of "role" -------------------------------------
@@ -59,12 +78,21 @@ ENGINE = InnoDB;
 -- ---------------------------------------------------------
 
 
--- Dump data of "comment" ----------------------------------
+-- Dump data of "image" ------------------------------------
 -- ---------------------------------------------------------
 
 
 -- CREATE INDEX "index_id" -------------------------------------
 CREATE INDEX `index_id` USING BTREE ON `comment`( `id` );
+-- -------------------------------------------------------------
+
+
+-- CREATE LINK "lnk_image_comment" -----------------------------
+ALTER TABLE `comment`
+	ADD CONSTRAINT `lnk_image_comment` FOREIGN KEY ( `image_id` )
+	REFERENCES `image`( `id` )
+	ON DELETE Cascade
+	ON UPDATE Cascade;
 -- -------------------------------------------------------------
 
 
