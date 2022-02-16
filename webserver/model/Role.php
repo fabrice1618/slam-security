@@ -96,5 +96,7 @@ class Role extends Model
         return ($libelle === $this->libelle);
     }
 
-}
+
+
+
 

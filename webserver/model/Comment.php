@@ -24,10 +24,11 @@ class Comment extends Model
         }
     }
 
-    public function read($limit): array
+
+    public function read(): array
     {
         $comments = array();
-        $stmt1 = $this->PDO->prepare(QUERY_INDEX . $limit);
+        $stmt1 = $this->PDO->prepare(QUERY_INDEX);
         if ($stmt1->execute()) {
             $rows = $stmt1->fetchAll();
             foreach ($rows as $row) {

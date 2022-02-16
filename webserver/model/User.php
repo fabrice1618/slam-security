@@ -92,6 +92,16 @@ class User extends Model
         return ($sNewPassword);
     }
 
+    public function toArray()
+    {
+        $aTableau =array (
+            "email" => $this->email,
+            "role" =>  $this->role,
+            "password" =>  $this->password
+        );
+        return ($aTableau);
+    }
+
     /**
      * @return int
      */
@@ -125,17 +135,17 @@ class User extends Model
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getRole(): string
+    public function getRole(): int
     {
         return $this->role;
     }
 
     /**
-     * @param string $role
+     * @param int $role
      */
-    public function setRole(string $role): void
+    public function setRole(int $role): void
     {
         $this->role = $role;
     }
@@ -160,8 +170,4 @@ class User extends Model
     {
         return ($email === $this->email && md5($password) === $this->password && $role === $this->role);
     }
-
-
-
-
-
+}
