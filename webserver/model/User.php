@@ -4,7 +4,7 @@ declare(strict_types = 1);
 const QUERY_INSERT = "INSERT INTO user (id, email, password, role) VALUES (NULL, :email, :password, :role) ";
 const QUERY_SELECT_BY_ID = "SELECT * FROM user WHERE id = :id LIMIT 1";
 const QUERY_SELECT_EMAIL = "SELECT * FROM user WHERE email = :email LIMIT 1";
-const QUERY_UPDATE = "UPDATE user SET email = :email, password = :password, role = :role, WHERE id = :id";
+const QUERY_UPDATE = "UPDATE user SET email = :email, password = :password, role = :role WHERE id = :id";
 const QUERY_DELETE = "DELETE FROM user WHERE id = :id ";
 
 class User extends Model
@@ -18,7 +18,7 @@ class User extends Model
 
     public function create(): void
     {
-        $stmt1 = $this->pdo->prepare(QUERY_INSERT);
+        $stmt1 = $this->PDO->prepare(QUERY_INSERT);
         $stmt1->bindValue(':email', $this->email);
         $stmt1->bindValue(':password', $this->password);
         $stmt1->bindValue(':role', $this->role);
@@ -29,7 +29,7 @@ class User extends Model
 
     public function findByEmail(string $email): bool
     {
-        $stmt1 = $this->pdo->prepare(QUERY_SELECT_EMAIL);
+        $stmt1 = $this->PDO->prepare(QUERY_SELECT_EMAIL);
         $stmt1->bindValue(':email', $email);
         if ($stmt1->execute()) {
             $response = $stmt1->fetch(PDO::FETCH_ASSOC);
@@ -48,7 +48,7 @@ class User extends Model
 
     public function read()
     {
-        $stmt1 = $this->pdo->prepare(QUERY_SELECT_BY_ID);
+        $stmt1 = $this->PDO->prepare(QUERY_SELECT_BY_ID);
         $stmt1->bindValue(':id', $this->id, PDO::PARAM_INT);
         if ($stmt1->execute()) {
             $this->data = $stmt1->fetch(PDO::FETCH_ASSOC);
@@ -61,7 +61,7 @@ class User extends Model
 
     public function update(): bool
     {
-        $stmt1 = $this->pdo->prepare(QUERY_UPDATE);
+        $stmt1 = $this->PDO->prepare(QUERY_UPDATE);
         $stmt1->bindValue(':role', $this->role);
         $stmt1->bindValue(':email', $this->email);
         $stmt1->bindValue(':password', $this->password);
@@ -74,7 +74,7 @@ class User extends Model
 
     public function delete()
     {
-        $stmt1 = $this->pdo->prepare(QUERY_DELETE);
+        $stmt1 = $this->PDO->prepare(QUERY_DELETE);
         $stmt1->bindValue(':id', $this->id, PDO::PARAM_INT);
         if ($stmt1->execute()) {
             return true;

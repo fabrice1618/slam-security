@@ -14,17 +14,17 @@ class Image extends Model{
 
     public function create(): void
     {
-        $stmt1 = $this->pdo->prepare(QUERY_INSERT);
+        $stmt1 = $this->PDO->prepare(QUERY_INSERT);
         $stmt1->bindValue(':type', $this->type);
         $stmt1->bindValue(':content', $this->content);
         if ($stmt1->execute()) {
-            $this->id = (int)$this->pdo->lastInsertId();
+            $this->id = (int)$this->PDO->lastInsertId();
         }
     }
 
     public function read()
     {
-        $stmt1 = $this->pdo->prepare(QUERY_SELECT_BY_ID);
+        $stmt1 = $this->PDO->prepare(QUERY_SELECT_BY_ID);
         $stmt1->bindValue(':id', $this->id, PDO::PARAM_INT);
         if ($stmt1->execute()) {
             $this->data = $stmt1->fetch(PDO::FETCH_ASSOC);
@@ -36,7 +36,7 @@ class Image extends Model{
 
     public function delete()
     {
-        $stmt1 = $this->pdo->prepare(QUERY_DELETE);
+        $stmt1 = $this->PDO->prepare(QUERY_DELETE);
         $stmt1->bindValue(':id', $this->id, PDO::PARAM_INT);
         if ($stmt1->execute()) {
             return true;

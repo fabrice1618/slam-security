@@ -1,9 +1,9 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 const QUERY_INSERT = "INSERT INTO role (id, libelle) VALUES (NULL, :libelle) ";
 const QUERY_SELECT_BY_ID = "SELECT * FROM role WHERE id = :id LIMIT 1";
-const QUERY_UPDATE = "UPDATE role SET role = :role, WHERE id = :id";
+const QUERY_UPDATE = "UPDATE role SET role = :role WHERE id = :id";
 const QUERY_DELETE = "DELETE FROM role WHERE id = :id ";
 
 class Role extends Model
@@ -12,21 +12,19 @@ class Role extends Model
     private string $libelle;
 
 
-
     public function create(): void
     {
-        $stmt1 = $this->pdo->prepare(QUERY_INSERT);
+        $stmt1 = $this->PDO->prepare(QUERY_INSERT);
         $stmt1->bindValue(':libelle', $this->libelle);
         if ($stmt1->execute()) {
             $this->id = (int)$this->pdo->lastInsertId();
         }
     }
 
-    
 
     public function read()
     {
-        $stmt1 = $this->pdo->prepare(QUERY_SELECT_BY_ID);
+        $stmt1 = $this->PDO->prepare(QUERY_SELECT_BY_ID);
         $stmt1->bindValue(':id', $this->id, PDO::PARAM_INT);
         if ($stmt1->execute()) {
             $this->data = $stmt1->fetch(PDO::FETCH_ASSOC);
@@ -37,7 +35,7 @@ class Role extends Model
 
     public function update(): bool
     {
-        $stmt1 = $this->pdo->prepare(QUERY_UPDATE);
+        $stmt1 = $this->PDO->prepare(QUERY_UPDATE);
         $stmt1->bindValue(':libelle', $this->libelle);
         $stmt1->bindValue(':id', $this->id, PDO::PARAM_INT);
         if ($stmt1->execute()) {
@@ -48,7 +46,7 @@ class Role extends Model
 
     public function delete()
     {
-        $stmt1 = $this->pdo->prepare(QUERY_DELETE);
+        $stmt1 = $this->PDO->prepare(QUERY_DELETE);
         $stmt1->bindValue(':id', $this->id, PDO::PARAM_INT);
         if ($stmt1->execute()) {
             return true;
@@ -56,7 +54,6 @@ class Role extends Model
         return false;
     }
 
-    
 
     /**
      * @return int
@@ -95,6 +92,7 @@ class Role extends Model
     {
         return ($libelle === $this->libelle);
     }
+}
 
 
 
